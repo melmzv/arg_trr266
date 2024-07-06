@@ -1,0 +1,23 @@
+---
+title: "Assignment II Analysis"
+author: "Melisa Mazaeva"
+date: "2024-07-12"
+format: html
+---
+
+# Introduction
+This document presents the analysis performed in Assignment 1, adapted to the open science workflow. Note that intermediate check steps have been omitted.
+
+# Methodology
+## Data Loading
+```{python}
+import pandas as pd
+import numpy as np
+
+# Load the data
+static_data = pd.read_csv('data/external/wscp_static.txt', delimiter='\t')
+panel_data = pd.read_excel('data/external/wscp_panel.xlsx')
+
+# Display first few rows of the datasets
+print(static_data.head())
+print(panel_data.head())
