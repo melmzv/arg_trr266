@@ -218,7 +218,7 @@ print("Median Residual Income by P/B Group and Relative Year:\n", median_residua
 print()
 
 # Save the results to an Excel file 
-median_residual_income.to_excel('median_residual_income.xlsx')
+median_residual_income.to_excel('output/median_residual_income.xlsx')
 
 
 '''
@@ -247,17 +247,17 @@ filtered_data['p/b_group'] = filtered_data.groupby('isin')['p/b_group'].ffill()
 median_pb_values = filtered_year_0_data.groupby('p/b_group', observed=True)['p/b'].median()
 
 # Group by P/B group and relative year, then calculate the median deflated residual income for each group and year
-median_residual_income = filtered_data.groupby(['p/b_group', 'relative_year'], observed=True)['deflated_residual_income'].median().unstack()
+median_residual_income_filtered = filtered_data.groupby(['p/b_group', 'relative_year'], observed=True)['deflated_residual_income'].median().unstack()
 
 # Formatting the results (decimal places)
-median_residual_income = median_residual_income.apply(lambda col: col.map(lambda x: f"{x:.3f}" if pd.notna(x) else "NaN"))
+median_residual_income_filtered = median_residual_income_filtered.apply(lambda col: col.map(lambda x: f"{x:.3f}" if pd.notna(x) else "NaN"))
 median_pb_values = median_pb_values.apply(lambda x: f"{x:.2f}")
 
 # Add the median P/B values column to the output table
-median_residual_income.insert(0, 'P/B', median_pb_values)
+median_residual_income_filtered.insert(0, 'P/B', median_pb_values)
 
 # Print the median residual income table
-print("Median Residual Income by P/B Group and Relative Year:\n", median_residual_income)
+print("Median Residual Income by P/B Group and Relative Year:\n", median_residual_income_filtered)
 
 # Save the results to an Excel file
-median_residual_income.to_excel('median_residual_income_filtered.xlsx')
+median_residual_income_filtered.to_excel('output/median_residual_income_filtered.xlsx')
