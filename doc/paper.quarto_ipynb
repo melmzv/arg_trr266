@@ -1,0 +1,240 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: |\n",
+        "  | Exporing Discretionary Accruals: \n",
+        "  | A Stub Project^[I acknowledge financial support from Deutsche Forschungsgemeinschaft-Project-ID 403041268 - TRR 266.] \\vspace{1cm}\n",
+        "author: |\n",
+        "  | Joachim Gassen \n",
+        "  | TRR 266 Accounting for Transparency\n",
+        "  | Humboldt-Universität zu Berlin \n",
+        "  | gassen@wiwi.hu-berlin.de\n",
+        "date: today\n",
+        "date-format: MMM D, YYYY [\\vspace{1cm}]\n",
+        "abstract: |\n",
+        "  | The Open Science movement promotes the accessibility and reusability of research. This repository has the objective to help researchers establishing such an collaboration-oriented workflow. It uses a toy project on discretionary accruals for demonstration. \n",
+        "  | \\vspace{6cm}\n",
+        "bibliography: references.bib\n",
+        "biblio-style: apsr\n",
+        "format:\n",
+        "  pdf:\n",
+        "    documentclass: article\n",
+        "    number-sections: true\n",
+        "    toc: false\n",
+        "fig_caption: yes\n",
+        "fontsize: 11pt\n",
+        "ident: yes\n",
+        "always_allow_html: yes\n",
+        "header-includes:\n",
+        "  - \\usepackage[nolists]{endfloat}    \n",
+        "  - \\usepackage{setspace}\\doublespacing\n",
+        "  - \\setlength{\\parindent}{4em}\n",
+        "  - \\setlength{\\parskip}{0em}\n",
+        "  - \\usepackage[hang,flushmargin]{footmisc}\n",
+        "  - \\usepackage{caption} \n",
+        "  - \\captionsetup[table]{skip=24pt,font=bf}\n",
+        "  - \\usepackage{array}\n",
+        "  - \\usepackage{threeparttable}\n",
+        "  - \\usepackage{adjustbox}\n",
+        "  - \\usepackage{graphicx}\n",
+        "  - \\usepackage{csquotes}\n",
+        "  - \\usepackage[margin=1in]{geometry}\n",
+        "---"
+      ],
+      "id": "a43bb989"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| output: false\n",
+        "\n",
+        "import pickle\n",
+        "\n",
+        "with open('../output/results.pickle', 'rb') as f:\n",
+        "        results = pickle.load(f)\n",
+        "\n",
+        "min_fyear, max_fyear, no_unique_firms = results['Desc information'].values()\n",
+        "\n",
+        "\n",
+        "def rename_var_to_label(table, italic=True):\n",
+        "    for var_name, var_label in results['Variable Names'].items():\n",
+        "        var_label = f'\\\\textit{{{var_label}}}' if italic else var_label\n",
+        "        table = table.replace(var_name, var_label)\n",
+        "    return table"
+      ],
+      "id": "1234ca23",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "\\pagebreak\n",
+        "\n",
+        "\n",
+        "\n",
+        "# Introduction\n",
+        "\n",
+        "This is not a paper but a stub that is part of a [project template repository](https://github.com/trr266/treat). We developed this repository to provide a prototype for a reproducible and collaborative workflow. Several authors have discussed advantages of such workflows (@W_2017, @GGR_2018, @CFM_2019) and many scholars across fields have voiced the need for increased reproducibility in science (e.g., @I_2005, @GL_2014, @DPR_2017).\n",
+        "\n",
+        "\n",
+        "# Discretionary Accruals\n",
+        "\n",
+        "To demonstrate our workflow, we explore discretionary accruals across the U.S. We calculate modified Jones and Dechow and Dichev type accruals and show their distributional properties. The main purpose of all this, however, is to provide a toy use case for [our project template directory](https://github.com/trr266/project_template) that contains all the code to obtain the data, run the analysis and prepare a paper as well as a presentation.\n",
+        "\n",
+        "Table \\ref{tab:tab-descriptives-sample} presents our data that is based on a simple WRDS pull of Compustat data with financial firms (SIC 6XXX) excluded. We require data to calculate all variables and this drastically reduces the sample size. Modified Jones discretionary accruals are calculated loosely based on @HN_2007 and Dechow and Dichev discretionary accruals are calculated based on (big surprise) @DD_2002. As you will see from @fig-boxplot_smp, discretionary accruals are very noisy constructs, even after limiting the sample to observations with complete data and winsorizing all data to the top and bottom percentile for each year. @fig-scatter_dd_lnta shows a very prominent heteroscedasticity of discretionary accruals with regards to size. While researchers have tried to address this problem, the distributional properties of these constructs significantly complicate the interpretation of discretionary accrual-related findings. Especially in high powered settings, the measurement error, being highly correlated with size, will tend to load on variables that are unrelated to the underlying economic construct but correlated with size. Table \\ref{tab:corr} shows some correlations and Table \\ref{tab:reg} shows some completely pointless regressions.\n"
+      ],
+      "id": "ab65d61b"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "fig-format": "svg"
+      },
+      "source": [
+        "#| label: fig-boxplot_smp\n",
+        "#| fig-cap: Distribution of Discretionary Accruals over Time\n",
+        "#| echo: false\n",
+        "\n",
+        "results['fig_boxplot_smp']"
+      ],
+      "id": "fig-boxplot_smp",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "fig-format": "svg"
+      },
+      "source": [
+        "#| label: fig-scatter_dd_lnta\n",
+        "#| fig-cap: Dechow and Dichev DA and Firm Size\n",
+        "#| echo: false\n",
+        "\n",
+        "results['fig_scatter_dd_lnta']"
+      ],
+      "id": "fig-scatter_dd_lnta",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| output: asis\n",
+        "\n",
+        "lat_tab = rename_var_to_label(results['Descriptive Statistics']).split('\\n')\n",
+        "lat_tab[4] = '\\\\\\\\[-1.8ex]\\\\hline \\\\hline \\\\\\\\[-1.8ex]'\n",
+        "lat_tab[6] = '\\\\hline\\\\\\\\[-1.8ex]'\n",
+        "lat_tab[-4] = '\\\\\\\\[-1.8ex]\\\\hline \\\\hline \\\\\\\\[-1.8ex]'\n",
+        "\n",
+        "print('\\n'.join([\n",
+        "    '\\\\begin{table}[!htbp]',  \n",
+        "    '\\caption{\\label{tab:descriptives}Descriptive Statistics}',\n",
+        "    '\\label{tab:tab-descriptives-sample}',\n",
+        "    '\\\\begin{adjustbox}{width=\\\\textwidth}',\n",
+        "    '\\\\begin{threeparttable}',\n",
+        "    '\\n'.join(lat_tab[3:-2]),\n",
+        "    '\\\\begin{tablenotes}[flushleft]',\n",
+        "    '\\setlength{\\labelsep}{0pt}',\n",
+        "    '\\\\footnotetext',\n",
+        "    f'\\\\item Note: The data is obtained from the Compustat U.S. as provided by WRDS. The sample covers the period {int(min_fyear)} to {int(max_fyear)} and {no_unique_firms:,} unique firms.',\n",
+        "    '\\end{tablenotes}',\n",
+        "    '\\end{threeparttable}',\n",
+        "    '\\end{adjustbox}',\n",
+        "    '\\\\end{table}',\n",
+        "]))"
+      ],
+      "id": "5ebe5f5f",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| output: asis\n",
+        "\n",
+        "lat_tab = rename_var_to_label(results['Correlations'], False).split('\\n')\n",
+        "\n",
+        "lat_tab[2] = '\\\\\\\\[-0.9ex]\\\\hline \\\\hline \\\\\\\\[-0.9ex]'\n",
+        "lat_tab[4] = '\\\\hline\\\\\\\\[-1.8ex]'\n",
+        "lat_tab[12] = '\\\\\\\\[-0.9ex]\\\\hline \\\\hline \\\\\\\\[-0.9ex]'\n",
+        "lat_tab[14] = '\\\\begin{tablenotes}[flushleft]'\n",
+        "\n",
+        "\n",
+        "print('\\n'.join([\n",
+        "    \"\\\\begin{table}[!htbp]\",\n",
+        "    \"\\centering\",\n",
+        "    \"\\caption{\\label{tab:CorrTable}Correlations}\",\n",
+        "    '\\label{tab:corr}',\n",
+        "    '\\n'.join(lat_tab),\n",
+        "    \"\\end{table}\"\n",
+        "]))"
+      ],
+      "id": "c10784d0",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "#| output: asis\n",
+        "\n",
+        "print('\\n'.join([\n",
+        "    '\\\\begin{table}[!htbp] \\\\centering',\n",
+        "    '\\\\caption{\\\\label{tab:reg}Regressions}', \n",
+        "    '\\label{tab:reg}',\n",
+        "    rename_var_to_label('\\n'.join(results['Regression'].split('\\n')[3:-1])),\n",
+        "    \"\\end{table}\"\n",
+        "]))"
+      ],
+      "id": "3cd3c532",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "# Conclusion\n",
+        "\n",
+        "Isn't that wonderful? Discretionary accruals rock but what rocks even more is open science and a collaborative workflow. Clone or fork this repository to kickstart your own projects. If you do not like either R or Python, consider contributing code in your favorite statistical programming language to the repo. Thanks for reading and enjoy!\n",
+        "\n",
+        "\\pagebreak\n",
+        "\n",
+        "\\setcounter{table}{0}\n",
+        "\\renewcommand{\\thetable}{\\arabic{table}}\n",
+        "\n",
+        "# References {-}\n",
+        "\\setlength{\\parindent}{-0.2in}\n",
+        "\\setlength{\\leftskip}{0.2in}\n",
+        "\\setlength{\\parskip}{8pt}\n",
+        "\\noindent"
+      ],
+      "id": "2b83b6cd"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "/Users/melissam/Library/Python/3.12/share/jupyter/kernels/python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}

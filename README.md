@@ -7,6 +7,17 @@ But even if you do not care about discretionary accruals (who wouldn't?) or do n
 The default branch, `only_python`, is a stripped down version of the template that only contains Python workflow. The `main` branch contains both the R and Python workflows and is a work in progress.
 
 
+### Project Overview
+The goal is to integrate the existing work from Assignment I into a structured project repository TREAT that follows best practices for reproducibility. 
+Specifically, the objectives are:
+1.	Organize the repo:
+	*	Relocate the analysis script and data files into the appropriate directories in the TREAT template.
+	*	Provide documentation within the Quarto (Markdown) files.
+2.	Extend the document from Assignment I:
+	*	Combine text, code, and results in a single document.
+	*	Follow the TREAT template to present the final output in a standardized manner.
+
+
 ### Where do I start?
 
 You start by setting up few tools on your system.
