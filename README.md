@@ -6,7 +6,7 @@ This repository provides an infrastructure for open science oriented empirical p
 
 This code base, adapted from TRR 266 Template for Reproducible Empirical Accounting Research, should give you an overview on how the template is supposed to be used for my specific project and how to structure a reproducible empirical project.
 
-The default branch, `only_python`, is a stripped down version of the template that only contains Python workflow. The `main` branch contains both the R and Python workflows and is a work in progress.
+The default branch, `only_python`, is a stripped down version of the template that only contains Python workflow. Clone this branch only, as we are focused only on Python workflow.
 
 
 ### Project Overview - Adapting the Template to My Project
@@ -45,7 +45,7 @@ Then browse around the repository and familiarize yourself with its folders. You
 
 - `info`: This is a folder that can store additional documentation. In our case you will find a RMarkdown file that introduces our TRR 266-themed ggplot theme.
 
-You also see an `output` directory but it is empty. Why? Because you will create the output locally on your computer, if you want. Specifically, this is the directory where output files (e.g., `median_residual_income.xlsx` and median_residual_income_filtered.xlsx) will be saved locally.
+You also see an `output` directory but it is empty. Why? Because you will create the output locally on your computer, if you want. Specifically, this is the directory where output files (e.g., `median_residual_income.xlsx` and `median_residual_income_filtered.xlsx`) will be saved locally.
 
 
 ### How do I create the output?
