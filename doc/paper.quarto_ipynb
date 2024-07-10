@@ -45,7 +45,7 @@
         "  - \\usepackage[margin=1in]{geometry}\n",
         "---"
       ],
-      "id": "a43bb989"
+      "id": "79dbe574"
     },
     {
       "cell_type": "code",
@@ -68,7 +68,7 @@
         "        table = table.replace(var_name, var_label)\n",
         "    return table"
       ],
-      "id": "1234ca23",
+      "id": "01559ea6",
       "execution_count": null,
       "outputs": []
     },
@@ -91,7 +91,7 @@
         "\n",
         "Table \\ref{tab:tab-descriptives-sample} presents our data that is based on a simple WRDS pull of Compustat data with financial firms (SIC 6XXX) excluded. We require data to calculate all variables and this drastically reduces the sample size. Modified Jones discretionary accruals are calculated loosely based on @HN_2007 and Dechow and Dichev discretionary accruals are calculated based on (big surprise) @DD_2002. As you will see from @fig-boxplot_smp, discretionary accruals are very noisy constructs, even after limiting the sample to observations with complete data and winsorizing all data to the top and bottom percentile for each year. @fig-scatter_dd_lnta shows a very prominent heteroscedasticity of discretionary accruals with regards to size. While researchers have tried to address this problem, the distributional properties of these constructs significantly complicate the interpretation of discretionary accrual-related findings. Especially in high powered settings, the measurement error, being highly correlated with size, will tend to load on variables that are unrelated to the underlying economic construct but correlated with size. Table \\ref{tab:corr} shows some correlations and Table \\ref{tab:reg} shows some completely pointless regressions.\n"
       ],
-      "id": "ab65d61b"
+      "id": "e80f04f2"
     },
     {
       "cell_type": "code",
@@ -154,7 +154,7 @@
         "    '\\\\end{table}',\n",
         "]))"
       ],
-      "id": "5ebe5f5f",
+      "id": "1d1a938e",
       "execution_count": null,
       "outputs": []
     },
@@ -182,7 +182,7 @@
         "    \"\\end{table}\"\n",
         "]))"
       ],
-      "id": "c10784d0",
+      "id": "a487aa25",
       "execution_count": null,
       "outputs": []
     },
@@ -201,7 +201,7 @@
         "    \"\\end{table}\"\n",
         "]))"
       ],
-      "id": "3cd3c532",
+      "id": "6001aea7",
       "execution_count": null,
       "outputs": []
     },
@@ -224,7 +224,7 @@
         "\\setlength{\\parskip}{8pt}\n",
         "\\noindent"
       ],
-      "id": "2b83b6cd"
+      "id": "df4491d0"
     }
   ],
   "metadata": {
