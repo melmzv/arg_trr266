@@ -1,6 +1,6 @@
 ## The TRR 266 Template for Reproducible Empirical Accounting Research 
 
-This project uses the TRR 266 Template for Reproducible Empirical Accounting Research (TREAT) and provides an infrastructure for open science oriented empirical projects. It has been adapted to analyze residual income based on grouped P/B ratios of U.S. public firms using external Worldscope data sets. It showcases a reproducible workflow integrating Python scripts and data analysis. The analysis is performed using a Python script that processes input data files from Wolrdscope and generates output Excel files with the results as well as the documentation files.
+This project uses the TRR 266 Template for Reproducible Empirical Accounting Research (TREAT) and provides an infrastructure for open science oriented empirical projects. It has been adapted to analyze residual income based on grouped P/B ratios of U.S. public firms using external Worldscope data sets. It showcases a reproducible workflow integrating Python scripts and data analysis. The analysis is performed using a Python script that processes input data files from Wolrdscope and generates output  documentation files with the results.
 
 This code base, adapted from TREAT, should give you an overview on how the template is supposed to be used for my specific project and how to structure a reproducible empirical project.
 
@@ -35,7 +35,7 @@ Then browse around the repository and familiarize yourself with its folders. You
 
 - `config`: This directory holds configuration files that are being called by the program scripts in the `code` directory. We try to keep the configurations separate from the code to make it easier to adjust the workflow to your needs.
 
-- `code`: This directory holds Python program script that is being called to load data from Worldscope, prepare the data, run the analysis and create the output files (an excel output table, a paper and a presentation, both PDF files).
+- `code`: This directory holds Python program script that is being called to load data from Worldscope, prepare the data, run the analysis and create the output files (excel output tables; a paper and a presentation, both PDF files to be generated in `doc` directory).
 
 - `data`: A directory where data is stored. You will see that it again contains sub-directories and a README file that explains their purpose. You will also see that in the `external` sub-directory there are two data files. Again, the README file explains their content.
 
