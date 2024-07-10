@@ -6,8 +6,8 @@ import numpy as np
 Step 1
 '''
 # Load the data from Worldscope files into pandas DataFrames
-static_data = pd.read_csv('/Users/melissam/Documents/Uni🏅🩷/SS 24🥇/708014 Accounting Reading Group/Assignment I/wscp_static.txt', delimiter='\t') # use '\t' due to tab-separation in the static file
-panel_data = pd.read_excel('/Users/melissam/Documents/Uni🏅🩷/SS 24🥇/708014 Accounting Reading Group/Assignment I/wscp_panel.xlsx')
+static_data = pd.read_csv('data/external/wscp_static.txt', delimiter='\t') # use '\t' due to tab-separation in the static file
+panel_data = pd.read_excel('data/external/wscp_panel.xlsx')
 # Normalize column names to avoid issues caused by variation in column naming conventions
 static_data.columns = static_data.columns.str.strip().str.lower().str.replace(' ', '_')
 panel_data.columns = panel_data.columns.str.strip().str.lower().str.replace(' ', '_')
