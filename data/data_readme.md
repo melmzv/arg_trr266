@@ -1,4 +1,5 @@
 # Data Directory
+## This file describes the data directory structure and its contents.
 Use this data_readme to briefly describe your data used in the project
 
 These directories are meant to be organized as follows:

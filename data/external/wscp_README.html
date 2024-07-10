@@ -46,20 +46,14 @@ ul.task-list li input[type="checkbox"] {
 
 
 
+<section id="this-file-contains-info-to-the-raw-data-files-from-worldscope." class="level2">
+<h2 class="anchored" data-anchor-id="this-file-contains-info-to-the-raw-data-files-from-worldscope.">This file contains info to the raw data files from Worldscope.</h2>
 <p>The two data files “wscp_static.txt” and “wscp_panel.xlsx” contain financial data from Worldscope, used for analyzing residual income.</p>
-<p>wscp_static.txt</p>
-<pre><code>*   This file contains static data about firms.
-*   Format: Tab-separated values (TSV).
-*   Columns: Various firm-specific information, including isin (International Securities Identification Number) and country.</code></pre>
-<p>wscp_panel.xlsx</p>
-<pre><code>•   This file contains panel data for the same firms over multiple years.
-•   Format: Excel (XLSX).
-•   Columns: Various financial metrics over time, including year_, mve (Market Value of Equity), bve (Book Value of Equity), and ninc (Net Income).</code></pre>
-<p>Notes:</p>
-<pre><code>•   Ensure column names are normalized (lowercase, no spaces) for consistency (implemented in Python script in `code/python`).
-•   The isin column is used to merge static and panel data.
-•   Handle missing or infinite values appropriately in calculations (implemented in Python script in `code/python`).</code></pre>
+<p>wscp_static.txt - This file contains static data about firms. - Format: Tab-separated values (txt). - The columns contain various firm-specific information, including isin (International Securities Identification Number), firm name, and country.</p>
+<p>wscp_panel.xlsx - This file contains panel data for the same firms over multiple years. - Format: Excel (xlsx). - The columns contain financial metrics of firms over time, including year_, mve (Market Value of Equity), bve (Book Value of Equity), and ninc (Net Income).</p>
+<p>Notes: - Ensure column names are normalized (lowercase, no spaces) for consistency (implemented in Python script in <code>code/python</code>). - The isin column is used to merge static and panel data. - Handle missing or infinite values appropriately in calculations (implemented in Python script in <code>code/python</code>).</p>
 <p>These files are placed in the <code>data/external</code> directory and are essential for running the analysis script in this repository.</p>
+</section>
 
 </main>
 <!-- /main column -->

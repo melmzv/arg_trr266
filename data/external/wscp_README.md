@@ -1,3 +1,4 @@
+## This file contains info to the raw data files from Worldscope.
 The two data files “wscp_static.txt” and “wscp_panel.xlsx” contain financial data from Worldscope, used for analyzing residual income.
 
 wscp_static.txt
