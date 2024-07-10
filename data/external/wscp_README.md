@@ -2,9 +2,9 @@ The two data files “wscp_static.txt” and “wscp_panel.xlsx” contain finan
 
 wscp_static.txt
 
-	•	This file contains static data about firms.
-	•	Format: Tab-separated values (TSV).
-	•	Columns: Various firm-specific information, including isin (International Securities Identification Number) and country.
+	*	This file contains static data about firms.
+	*	Format: Tab-separated values (TSV).
+	*	Columns: Various firm-specific information, including isin (International Securities Identification Number) and country.
 
 wscp_panel.xlsx
 
