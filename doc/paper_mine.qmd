@@ -89,20 +89,33 @@ By following the steps provided in Section 4 and adhering to the assumptions mad
 import pandas as pd
 import numpy as np
 import os
+import yaml
 
-# Paths to data files
-static_data_path = '/Users/melissam/Documents/GitHub/arg_trr266/data/external/wscp_static.txt' 
-panel_data_path = '/Users/melissam/Documents/GitHub/arg_trr266/data/external/wscp_panel.xlsx'
+# Function to get the path of the current file
+def get_current_path():
+    try:
+        return os.path.dirname(os.path.abspath(__file__))
+    except NameError:
+        return os.getcwd()
+
+# Define the relative path to the configuration file
+config_path = os.path.join(get_current_path(), '..', 'config', 'config.yaml')
+with open(config_path, 'r') as file:
+    config = yaml.safe_load(file)
+
+# Extract paths from the config file
+STATIC_DATA_PATH = os.path.join(get_current_path(), '..', config['data_paths']['static_data'])
+PANEL_DATA_PATH = os.path.join(get_current_path(), '..', config['data_paths']['panel_data'])
 
 # Check if files exist
-if not os.path.exists(static_data_path):
-    raise FileNotFoundError(f"{static_data_path} does not exist.")
-if not os.path.exists(panel_data_path):
-    raise FileNotFoundError(f"{panel_data_path} does not exist.")
+if not os.path.exists(STATIC_DATA_PATH):
+    raise FileNotFoundError(f"{STATIC_DATA_PATH} does not exist.")
+if not os.path.exists(PANEL_DATA_PATH):
+    raise FileNotFoundError(f"{PANEL_DATA_PATH} does not exist.")
 
 # Load the data from Worldscope files into pandas DataFrames
-static_data = pd.read_csv(static_data_path, delimiter='\t')  # use '\t' due to tab-separation in the static file
-panel_data = pd.read_excel(panel_data_path)
+static_data = pd.read_csv(STATIC_DATA_PATH, delimiter='\t')  # use '\t' due to tab-separation in the static file
+panel_data = pd.read_excel(PANEL_DATA_PATH)
 
 # Normalize column names to avoid issues caused by variation in column naming conventions
 static_data.columns = static_data.columns.str.strip().str.lower().str.replace(' ', '_')

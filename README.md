@@ -33,7 +33,7 @@ If you are new to scientific computing, we suggest that you also pick up a refer
 
 Then browse around the repository and familiarize yourself with its folders. You will quickly see that there are three folders that have files in them:
 
-- `config`: This directory holds configuration files that are being called by the program scripts in the `code` directory. We try to keep the configurations separate from the code to make it easier to adjust the workflow to your needs.
+- `config`: This directory holds configuration files that are being called by the program scripts in the `code` directory. We try to keep the configurations separate from the code to make it easier to adjust the workflow to your needs. In this project, we utilize a `config.yaml` file to manage configuration settings and paths in the `doc` directory, for example. This approach ensures that paths are relative to the repository, making the project portable and easy to use on different systems.
 
 - `code`: This directory holds Python program script that is being called to load data from Worldscope, prepare the data, run the analysis and create the output files (excel output tables; a paper and a presentation, both PDF files to be generated in `doc` directory).
 
