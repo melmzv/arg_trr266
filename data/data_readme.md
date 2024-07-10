@@ -15,8 +15,8 @@ These directories are meant to be organized as follows:
   within the repo. A codebook might be nice if you expect users to work with
   the data without working through your code but not strictly require.
   - In this project, the following files are stored here:
-   - `median_residual_income.xlsx`: Output file containing the median residual income analysis results.
-   - `median_residual_income_filtered.xlsx`: Output file containing the filtered median residual income analysis results, excluding extreme P/B values.
+    - `median_residual_income.xlsx`: Output file containing the median residual income analysis results.
+    - `median_residual_income_filtered.xlsx`: Output file containing the filtered median residual income analysis results, excluding extreme P/B values.
 - pulled: This is where you store data that your repo code pulls from external
   sources. Most of the time a data codebook won't be necessary as the external
   sources will provide documentation.
