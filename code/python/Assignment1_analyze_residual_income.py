@@ -218,7 +218,7 @@ print("Median Residual Income by P/B Group and Relative Year:\n", median_residua
 print()
 
 # Save the results to an Excel file 
-median_residual_income.to_excel('output/median_residual_income.xlsx')
+median_residual_income.to_excel('data/generated/median_residual_income.xlsx')
 
 
 '''
@@ -260,4 +260,4 @@ median_residual_income_filtered.insert(0, 'P/B', median_pb_values)
 print("Median Residual Income by P/B Group and Relative Year:\n", median_residual_income_filtered)
 
 # Save the results to an Excel file
-median_residual_income_filtered.to_excel('output/median_residual_income_filtered.xlsx')
+median_residual_income_filtered.to_excel('data/generated/median_residual_income_filtered.xlsx')
