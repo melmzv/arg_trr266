@@ -1,6 +1,6 @@
 ---
 title: |
-  | Exporing Discretionary Accruals: 
+  | Exporting Discretionary Accruals: 
   | A Stub Project^[I acknowledge financial support from Deutsche Forschungsgemeinschaft-Project-ID 403041268 - TRR 266.] \vspace{1cm}
 author: |
   | Joachim Gassen 

@@ -1,0 +1,50 @@
+---
+title: |
+  | Assignment II: 
+  | Adopting an Open Science Workflow \vspace{1cm}
+author: |
+  | Melisa Mazaeva 
+  | Accounting Reading Group – Summer 2024
+  | Humboldt-Universität zu Berlin 
+  | melisa.mazaeva@student.hu-berlin.de
+date: today
+date-format: MMM D, YYYY [\vspace{1cm}]
+abstract: |
+  | This project uses the TRR 266 Template for Reproducible Empirical Accounting Research (TREAT) and provides an infrastructure for open science oriented empirical projects. It has been adapted to analyze residual income based on grouped P/B ratios of U.S. public firms using external Worldscope data sets. It showcases a reproducible workflow integrating Python scripts and data analysis. The analysis is performed using a Python script that processes input data files from Wolrdscope and generates output documentation files with the results. This code base, adapted from TREAT, should give you an overview on how the template is supposed to be used for my specific project and how to structure a reproducible empirical project.
+  | \vspace{6cm}
+bibliography: references.bib
+biblio-style: apsr
+format:
+  pdf:
+    documentclass: article
+    number-sections: true
+    toc: false
+fig_caption: yes
+fontsize: 11pt
+ident: yes
+always_allow_html: yes
+header-includes:
+  - \usepackage[nolists]{endfloat}    
+  - \usepackage{setspace}\doublespacing
+  - \setlength{\parindent}{4em}
+  - \setlength{\parskip}{0em}
+  - \usepackage[hang,flushmargin]{footmisc}
+  - \usepackage{caption} 
+  - \captionsetup[table]{skip=24pt,font=bf}
+  - \usepackage{array}
+  - \usepackage{threeparttable}
+  - \usepackage{adjustbox}
+  - \usepackage{graphicx}
+  - \usepackage{csquotes}
+  - \usepackage[margin=1in]{geometry}
+---
+
+\pagebreak
+
+
+
+# Introduction
+
+The primary objective is to demonstrate a reproducible and collaborative research workflow by calculating and analyzing residual incomes and Price-to-Book (P/B) ratios. The analysis includes filtering relevant data, identifying key financial years, grouping firms based on their P/B ratios, and calculating delfated residual incomes for each firm/year.
+Assignment I aims to replicate an empirical table that involves calculating the residual income of US firms over a defined period and examining the relationship between residual income and the Price-to-Book (P/B) ratio. The replication process includes data preparation, cleaning, normalization, and the application of statistical methods to compute and interpret financial metrics using Python. By following a step-by-step approach, I provide insights into the trends of residual earnings across different P/B groups, identical to trends presented by Penman (2013).
+This document presents the analysis performed in Assignment 1, adapted to the open science workflow. Note that intermediate check steps have been omitted.
