@@ -1,5 +1,7 @@
 ## The TRR 266 Template for Reproducible Empirical Accounting Research 
 
+This project uses the TRR 266 Template for Reproducible Empirical Accounting Research. It has been adapted to analyze residual income and P/B ratios of U.S. public firms using Worldscope data.
+
 This repository provides an infrastructure for open science oriented empirical projects, specifically adapted for the analysis of residual income and P/B ratios of U.S. public firms using provided data sets from Worldscope data. It showcases a reproducible workflow integrating Python scripts and data analysis.
 
 This code base, adapted from TRR 266 Template for Reproducible Empirical Accounting Research, should give you an overview on how the template is supposed to be used for my specific project and how to structure a reproducible empirical project.
@@ -7,9 +9,8 @@ This code base, adapted from TRR 266 Template for Reproducible Empirical Account
 The default branch, `only_python`, is a stripped down version of the template that only contains Python workflow. The `main` branch contains both the R and Python workflows and is a work in progress.
 
 
-### Project Overview
-The goal is to integrate the existing work from Assignment I into a structured project repository TREAT that follows best practices for reproducibility. 
-Specifically, the objectives are:
+### Project Overview - Adapting the Template to My Project
+The goal is to integrate the existing work from Assignment I into a structured project repository TREAT that follows best practices for reproducibility. Specifically, the objectives are:
 1.	Organize the repo:
 	*	Relocate the analysis script and data files into the appropriate directories in the TREAT template.
 	*	Provide documentation within the Quarto (Markdown) files.
@@ -44,12 +45,12 @@ Then browse around the repository and familiarize yourself with its folders. You
 
 - `info`: This is a folder that can store additional documentation. In our case you will find a RMarkdown file that introduces our TRR 266-themed ggplot theme.
 
-You also see an `output` directory but it is empty. Why? Because you will create the output locally on your computer, if you want.
+You also see an `output` directory but it is empty. Why? Because you will create the output locally on your computer, if you want. Specifically, this is the directory where output files (e.g., `median_residual_income.xlsx` and median_residual_income_filtered.xlsx) will be saved locally.
 
 
 ### How do I create the output?
 
-Assuming that you have WRDS access, Vs Code and make installed, this should be relatively straightforward.
+Assuming that you have Worldscope data access, Vs Code and make installed, this should be relatively straightforward.
 
 1. Click on the `Use this template` button on the top right of the repository and choose `Create a new repository`. Give the repository a name, a description and choose whether it should be public or private. Click on `Create repository`.
 2. You can now clone the repository to your local machine. Open the repository in Vs Code and open a new terminal.
