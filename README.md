@@ -1,8 +1,8 @@
 ## The TRR 266 Template for Reproducible Empirical Accounting Research 
 
-This repository provides an infrastructure for open science oriented empirical projects. It is targeted to the empirical accounting research crowd. It features a toy project exploring discretionary accruals of U.S. public firms and requires access to U.S. Compustat data via WRDS.
+This repository provides an infrastructure for open science oriented empirical projects, specifically adapted for the analysis of residual income and P/B ratios of U.S. public firms using provided data sets from Worldscope data. It showcases a reproducible workflow integrating Python scripts and data analysis.
 
-But even if you do not care about discretionary accruals (who wouldn't?) or do not have WRDS access, its code base should give you a feel on how the template is supposed to be used and how to structure a reproducible empirical project.
+This code base, adapted from TRR 266 Template for Reproducible Empirical Accounting Research, should give you an overview on how the template is supposed to be used for my specific project and how to structure a reproducible empirical project.
 
 The default branch, `only_python`, is a stripped down version of the template that only contains Python workflow. The `main` branch contains both the R and Python workflows and is a work in progress.
 
