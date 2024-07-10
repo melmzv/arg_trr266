@@ -1,12 +1,10 @@
 ## The TRR 266 Template for Reproducible Empirical Accounting Research 
 
-This project uses the TRR 266 Template for Reproducible Empirical Accounting Research. It has been adapted to analyze residual income and P/B ratios of U.S. public firms using Worldscope data.
+This project uses the TRR 266 Template for Reproducible Empirical Accounting Research (TREAT) and provides an infrastructure for open science oriented empirical projects. It has been adapted to analyze residual income based on grouped P/B ratios of U.S. public firms using external Worldscope data sets. It showcases a reproducible workflow integrating Python scripts and data analysis. The analysis is performed using a Python script that processes input data files from Wolrdscope and generates output Excel files with the results as well as the documentation files.
 
-This repository provides an infrastructure for open science oriented empirical projects, specifically adapted for the analysis of residual income and P/B ratios of U.S. public firms using provided data sets from Worldscope data. It showcases a reproducible workflow integrating Python scripts and data analysis.
+This code base, adapted from TREAT, should give you an overview on how the template is supposed to be used for my specific project and how to structure a reproducible empirical project.
 
-This code base, adapted from TRR 266 Template for Reproducible Empirical Accounting Research, should give you an overview on how the template is supposed to be used for my specific project and how to structure a reproducible empirical project.
-
-The default branch, `only_python`, is a stripped down version of the template that only contains Python workflow. Clone this branch only, as we are focused only on Python workflow.
+The default branch, `only_python`, is a stripped down version of the template that only contains Python workflow. Only this branch was cloned from TREAT repo, as we are focused only on Python workflow.
 
 
 ### Project Overview - Adapting the Template to My Project
@@ -37,7 +35,7 @@ Then browse around the repository and familiarize yourself with its folders. You
 
 - `config`: This directory holds configuration files that are being called by the program scripts in the `code` directory. We try to keep the configurations separate from the code to make it easier to adjust the workflow to your needs.
 
-- `code`: This directory holds program scripts that are being called to download data from WRDS, prepare the data, run the analysis and create the output files (a paper and a presentation, both PDF files).
+- `code`: This directory holds Python program script that is being called to load data from Worldscope, prepare the data, run the analysis and create the output files (an excel output table, a paper and a presentation, both PDF files).
 
 - `data`: A directory where data is stored. You will see that it again contains sub-directories and a README file that explains their purpose. You will also see that in the `external` sub-directory there are two data files. Again, the README file explains their content.
 
@@ -45,7 +43,7 @@ Then browse around the repository and familiarize yourself with its folders. You
 
 - `info`: This is a folder that can store additional documentation. In our case you will find a RMarkdown file that introduces our TRR 266-themed ggplot theme.
 
-You also see an `output` directory but it is empty. Why? Because you will create the output locally on your computer, if you want. Specifically, this is the directory where output files (e.g., `median_residual_income.xlsx` and `median_residual_income_filtered.xlsx`) will be saved locally.
+You also see an `output` directory but it is empty. Why? Because you will create the output locally on your computer, if you want. Specifically, this is the directory where generated output excel files (e.g., `median_residual_income.xlsx` and `median_residual_income_filtered.xlsx`) will be saved locally.
 
 
 ### How to create the output?
