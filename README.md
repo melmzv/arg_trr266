@@ -48,7 +48,7 @@ Then browse around the repository and familiarize yourself with its folders. You
 You also see an `output` directory but it is empty. Why? Because you will create the output locally on your computer, if you want. Specifically, this is the directory where output files (e.g., `median_residual_income.xlsx` and `median_residual_income_filtered.xlsx`) will be saved locally.
 
 
-### How do I create the output?
+### How to create the output?
 
 Assuming that you have Worldscope data access, Vs Code and make installed, this should be relatively straightforward.
 
