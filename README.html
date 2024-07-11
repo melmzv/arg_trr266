@@ -48,11 +48,11 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="the-trr-266-template-for-reproducible-empirical-accounting-research" class="level2">
 <h2 class="anchored" data-anchor-id="the-trr-266-template-for-reproducible-empirical-accounting-research">The TRR 266 Template for Reproducible Empirical Accounting Research</h2>
-<p>This repository provides an infrastructure for open science oriented empirical projects. It is targeted to the empirical accounting research crowd. It features a toy project exploring discretionary accruals of U.S. public firms and requires access to U.S. Compustat data via WRDS.</p>
-<p>But even if you do not care about discretionary accruals (who wouldn’t?) or do not have WRDS access, its code base should give you a feel on how the template is supposed to be used and how to structure a reproducible empirical project.</p>
-<p>The default branch, <code>only_python</code>, is a stripped down version of the template that only contains Python workflow. The <code>main</code> branch contains both the R and Python workflows and is a work in progress.</p>
-<section id="project-overview" class="level3">
-<h3 class="anchored" data-anchor-id="project-overview">Project Overview</h3>
+<p>This project uses the TRR 266 Template for Reproducible Empirical Accounting Research (TREAT) and provides an infrastructure for open science oriented empirical projects. It has been adapted to analyze residual income based on grouped P/B ratios of U.S. public firms using external Worldscope data sets. It showcases a reproducible workflow integrating Python scripts and data analysis. The analysis is performed using a Python script that processes input data files from Wolrdscope and generates output documentation files with the results.</p>
+<p>This code base, adapted from TREAT, should give you an overview on how the template is supposed to be used for my specific project and how to structure a reproducible empirical project.</p>
+<p>The default branch, <code>only_python</code>, is a stripped down version of the template that only contains Python workflow. Only this branch was cloned from TREAT repo, as we are focused only on Python workflow.</p>
+<section id="project-overview---adapting-the-template-to-my-project" class="level3">
+<h3 class="anchored" data-anchor-id="project-overview---adapting-the-template-to-my-project">Project Overview - Adapting the Template to My Project</h3>
 <p>The goal is to integrate the existing work from Assignment I into a structured project repository TREAT that follows best practices for reproducibility. Specifically, the objectives are: 1. Organize the repo: * Relocate the analysis script and data files into the appropriate directories in the TREAT template. * Provide documentation within the Quarto (Markdown) files. 2. Extend the document from Assignment I: * Combine text, code, and results in a single document. * Follow the TREAT template to present the final output in a standardized manner.</p>
 </section>
 <section id="where-do-i-start" class="level3">
@@ -67,17 +67,17 @@ ul.task-list li input[type="checkbox"] {
 <p>If you are new to scientific computing, we suggest that you also pick up a reference from the list below and browse through it. The <a href="https://web.stanford.edu/~gentzkow/research/CodeAndData.pdf">Gentzkow and Shapiro (2014) paper</a> is a particularly easy and also useful read.</p>
 <p>Then browse around the repository and familiarize yourself with its folders. You will quickly see that there are three folders that have files in them:</p>
 <ul>
-<li><p><code>config</code>: This directory holds configuration files that are being called by the program scripts in the <code>code</code> directory. We try to keep the configurations separate from the code to make it easier to adjust the workflow to your needs.</p></li>
-<li><p><code>code</code>: This directory holds program scripts that are being called to download data from WRDS, prepare the data, run the analysis and create the output files (a paper and a presentation, both PDF files).</p></li>
+<li><p><code>config</code>: This directory holds configuration files that are being called by the program scripts in the <code>code</code> directory. We try to keep the configurations separate from the code to make it easier to adjust the workflow to your needs. In this project, we utilize a <code>config.yaml</code> file to manage configuration settings and paths in the <code>doc</code> directory, for example. This approach ensures that paths are relative to the repository, making the project portable and easy to use on different systems.</p></li>
+<li><p><code>code</code>: This directory holds Python program script that is being called to load data from Worldscope, prepare the data, run the analysis and create the output files (excel output tables; a paper and a presentation, both PDF files to be generated in <code>doc</code> directory).</p></li>
 <li><p><code>data</code>: A directory where data is stored. You will see that it again contains sub-directories and a README file that explains their purpose. You will also see that in the <code>external</code> sub-directory there are two data files. Again, the README file explains their content.</p></li>
-<li><p><code>doc</code>: Here you will find two Quarto files containing text and program instructions that will become our paper and presentation, by rendering them through the R markdown process and LaTeX.</p></li>
+<li><p><code>doc</code>: Here you will find two Quarto files containing text and program instructions that will become our paper and presentation, by rendering them through the R markdown process and LaTeX. &gt; [!TIP] &gt; Logo File Update: Convert <code>trr266_logo.eps</code> to ‘trr266_logo.pdf’ for compatibility with XeLaTeX. Update ‘beamer_theme_trr266.sty’ to reference the new PDF logo file. When running the presentation script, ensure <code>trr266_logo.pdf</code> is in the doc directory for the beamer theme to work correctly.</p></li>
 <li><p><code>info</code>: This is a folder that can store additional documentation. In our case you will find a RMarkdown file that introduces our TRR 266-themed ggplot theme.</p></li>
 </ul>
-<p>You also see an <code>output</code> directory but it is empty. Why? Because you will create the output locally on your computer, if you want.</p>
+<p>You also see an <code>output</code> directory but it is empty. Why? Because you will create the output locally on your computer, if you want. Specifically, this is the directory where generated output excel files (e.g., <code>median_residual_income.xlsx</code> and <code>median_residual_income_filtered.xlsx</code>) will be saved locally.</p>
 </section>
-<section id="how-do-i-create-the-output" class="level3">
-<h3 class="anchored" data-anchor-id="how-do-i-create-the-output">How do I create the output?</h3>
-<p>Assuming that you have WRDS access, Vs Code and make installed, this should be relatively straightforward.</p>
+<section id="how-to-create-the-output" class="level3">
+<h3 class="anchored" data-anchor-id="how-to-create-the-output">How to create the output?</h3>
+<p>Assuming that you have Worldscope data access, Vs Code and make installed, this should be relatively straightforward.</p>
 <ol type="1">
 <li>Click on the <code>Use this template</code> button on the top right of the repository and choose <code>Create a new repository</code>. Give the repository a name, a description and choose whether it should be public or private. Click on <code>Create repository</code>.</li>
 <li>You can now clone the repository to your local machine. Open the repository in Vs Code and open a new terminal.</li>

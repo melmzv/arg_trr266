@@ -39,7 +39,8 @@ Then browse around the repository and familiarize yourself with its folders. You
 
 - `data`: A directory where data is stored. You will see that it again contains sub-directories and a README file that explains their purpose. You will also see that in the `external` sub-directory there are two data files. Again, the README file explains their content.
 
-- `doc`: Here you will find two Quarto files containing text and program instructions that will become our paper and presentation, by rendering them through the R markdown process and LaTeX.
+- `doc`: Here you will find two Quarto files containing text and program instructions that will become our paper and presentation, by rendering them through the R markdown process and LaTeX. > [!TIP]
+> Logo File Update: Convert `trr266_logo.eps` to 'trr266_logo.pdf' for compatibility with XeLaTeX. Update 'beamer_theme_trr266.sty' to reference the new PDF logo file. When running the presentation script, ensure `trr266_logo.pdf` is in the doc directory for the beamer theme to work correctly.
 
 - `info`: This is a folder that can store additional documentation. In our case you will find a RMarkdown file that introduces our TRR 266-themed ggplot theme.
 
