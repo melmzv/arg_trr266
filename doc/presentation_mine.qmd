@@ -16,7 +16,7 @@ header-includes:
 - \usepackage{graphicx}
 - \usepackage{etoolbox}
 - \AtBeginEnvironment{verbatim}{\fontsize{7}{7}\selectfont}  # This sets the font size for verbatim environments
-#- \input{beamer_theme_trr266.sty}
+- \input{beamer_theme_trr266.sty}
 bibliography: references.bib
 biblio-style: apsr
 ---
