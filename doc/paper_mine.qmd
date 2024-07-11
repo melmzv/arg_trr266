@@ -64,7 +64,7 @@ header-includes:
 
 The primary objective is to demonstrate a reproducible and collaborative research workflow by calculating and analyzing residual incomes and Price-to-Book (P/B) ratios. The analysis includes filtering relevant data, identifying key financial years, grouping firms based on their P/B ratios, and calculating delfated residual incomes for each firm/year.
 
-Assignment I aims to replicate an empirical table that involves calculating the residual income of US firms over a defined period and examining the relationship between residual income and the Price-to-Book (P/B) ratio. The replication process includes data preparation, cleaning, normalization, and the application of statistical methods to compute and interpret financial metrics using Python. By following a step-by-step approach, I provide insights into the trends of residual earnings across different P/B groups, identical to trends presented by @Penman_2013. This document presents the analysis performed in Assignment I, adapted to the open science workflow. Note that intermediate check steps have been omitted.
+Assignment I aims to replicate an empirical table that involves calculating the residual income of US firms over a defined period and examining the relationship between residual income and the Price-to-Book (P/B) ratio. The replication process includes data preparation, cleaning, normalization, and the application of statistical methods to compute and interpret financial metrics using Python. By following a step-by-step approach, I provide insights into the trends of residual earnings across different P/B groups, identical to trends presented by @Penman_2013. This document presents the analysis performed in Assignment I, adapted to the open science workflow. Note that intermediate check steps have been omitted for brevity. The full code, including intermediate print steps to verify outputs, is presented in `code/python/Assignment1_analyze_residual_income.py`.
 
 # Assumptions and Notes
 
@@ -80,6 +80,9 @@ The aim of Assignment I is to replicate a specific empirical table that involves
 By following the steps provided in Section 4 and adhering to the assumptions made, I successfully replicated the analysis and produced the required table. A thorough step-by-step approach helped to understand and verify the outputs.
 
 # Replication Steps
+## Step 1: Data Loading and Merging
+Begin by loading the data from the provided Worldscope files. The static data contains information on unique ISIN IDs for each firm, as well as the corresponding firm name and country. The panel data provides the financial performance numbers of each ISIN. Merge the data on the ‘isin’ column to include country information in the panel data. This merging step is crucial for filtering the US firms specifically in further steps.
+
 
 ```{python}
 #| label: step1
@@ -108,176 +111,157 @@ with open(config_path, 'r') as file:
     config = yaml.safe_load(file)
 
 # Extract paths from the config file
-STATIC_DATA_PATH = os.path.join(project_root, 'data', 'external', 'wscp_static.txt')
-PANEL_DATA_PATH = os.path.join(project_root, 'data', 'external', 'wscp_panel.xlsx')
-
-# Check if files exist
-if not os.path.exists(STATIC_DATA_PATH):
-    raise FileNotFoundError(f"{STATIC_DATA_PATH} does not exist.")
-if not os.path.exists(PANEL_DATA_PATH):
-    raise FileNotFoundError(f"{PANEL_DATA_PATH} does not exist.")
+STATIC_DATA_PATH = os.path.join(project_root, 'data', 'external', 
+                                'wscp_static.txt')
+PANEL_DATA_PATH = os.path.join(project_root, 'data', 'external', 
+                               'wscp_panel.xlsx')
 
 # Load the data from Worldscope files into pandas DataFrames
-static_data = pd.read_csv(STATIC_DATA_PATH, delimiter='\t')  # use '\t' due to tab-separation in the static file
+static_data = pd.read_csv(STATIC_DATA_PATH, delimiter='\t')
 panel_data = pd.read_excel(PANEL_DATA_PATH)
 
-# Normalize column names to avoid issues caused by variation in column naming conventions
-static_data.columns = static_data.columns.str.strip().str.lower().str.replace(' ', '_')
-panel_data.columns = panel_data.columns.str.strip().str.lower().str.replace(' ', '_')
+# Normalize column names to avoid issues with column naming conventions
+static_data.columns = (
+    static_data.columns.str.strip()
+    .str.lower()
+    .str.replace(' ', '_')
+)
+
+panel_data.columns = (
+    panel_data.columns.str.strip()
+    .str.lower()
+    .str.replace(' ', '_')
+)
 
 # Merge data on 'isin' to include country information in panel_data
-merged_data = panel_data.merge(static_data[['isin', 'country']], on='isin', how='left')
-
-# Print the merged data to check. Now we have added a column on countries in panel data
-print("Step 1: Merged data sample on 'isin' from static and panel data:\n", merged_data.head(11))
-print()  # add this to get a blank line for better readability
-# To understand how many rows there are in the merged data
-num_rows1 = len(merged_data)
-print("Number of rows in merged data sample on 'isin' from static and panel data:", num_rows1)
-print()
-print()
+merged_data = panel_data.merge(
+    static_data[['isin', 'country']], 
+    on='isin', 
+    how='left'
+)
 ```
 
+## Step 2: Filter Data for US Firms and Relevant Years
+Filter the merged data to include only US firms (excluding UK and German firms) and the year range 1996-2015. This ensures that further calculations are based on the specific subset of data that matches the assignment’s criteria.
 ```{python}
 #| label: step2
 #| echo: true
 #| output: true
 
-# Filter the merged data for US firms and years 1996-2015
-us_firms = merged_data[merged_data['country'] == 'UNITED STATES']  # create a new DataFrame that contains only US firms
-filtered_data = us_firms[(us_firms['year_'] >= 1996) & (us_firms['year_'] <= 2015)].copy()  # further filter the us_firms DataFrame to keep the task's required year range
-
-# Print the filtered data to check
-print("Step 2: Filtered data sample on US firms and years 1996-2015:\n", filtered_data.head(22))
-print()
-
-# To understand how many rows were dropped out
-num_rows2 = len(filtered_data)
-print("Number of rows in filtered data sample on US firms and years 1996-2015:", num_rows2)
-print()
-print()
+us_firms = merged_data[merged_data['country'] == 'UNITED STATES']  
+filtered_data = us_firms[
+    (us_firms['year_'] >= 1996) & 
+    (us_firms['year_'] <= 2015)
+].copy() 
 ```
+
+## Step 3: Identify Year 0 to Year 6 for Each Firm
+To calculate the P/B values and residual incomes for each firm/year, it is necessary to identify the base year (Year 0) and the subsequent relative years within the range 0 – 6 in the filtered data, as presented by Penman (2013). Define Year 0 as the earliest year in the dataset for each firm and display it in a new column ‘year_0’ that holds this value, making ‘year_0’ the same for each ISIN. Additionally, create the column ‘relative_year’, represented as the difference between the current year and Year 0. Since a firm may have more than 7 years of observations in the filtered data, limit the data to include only the first seven years (Year 0 to Year 6) for each ISIN to match the assignment’s requirements.
+Notably, the number of observations after merging Step 1 (298,120), filtering Step 2 (142,837), and identifying years in Step 3 (89,584) nearly halves with each step.
+
 ```{python}
 #| label: step3
 #| echo: true
 #| output: true
 
-# Identify Year 0 to Year 6 for each firm within the filtered data
-filtered_data['year_0'] = filtered_data.groupby('isin')['year_'].transform('min')  # this column will hold the according “Year 0” for each firm
-filtered_data['relative_year'] = filtered_data['year_'] - filtered_data['year_0']  # this column now indicates how many years have passed since the firm’s “Year 0”
-filtered_data = filtered_data[filtered_data['relative_year'] <= 6]  # filter the data to include only the first seven years (Year 0 to Year 6) for each firm
-
-# Print the filtered data to check if it's empty or has data
-print("Step 3: Filtered data sample after identifying the Year 0 and relative years:\n", filtered_data.head(22))
-print()
-
-# To understand how many rows were dropped out
-num_rows3 = len(filtered_data)
-print("Number of rows in filtered data sample after identifying the Year 0 and relative years:", num_rows3)
-print()
-print()
+filtered_data['year_0'] = filtered_data.groupby('isin')['year_'].transform('min')  
+filtered_data['relative_year'] = filtered_data['year_'] - filtered_data['year_0']  
+filtered_data = filtered_data[filtered_data['relative_year'] <= 6]  
 ```
+
+## Step 4: Calculate P/B Ratio for Each Firm in Year 0
+According to Penman (2013), the residual earnings are calculated after P/B groups are formed in Year 0. Therefore, consider the firms’ financial performance data only for Year 0 to calculate the P/B ratio. Replace zero and infinite BVE values with NaN to drop invalid calculations
+(affecting 28 observations in total). Use the following formula to calculate the P/B ratio:
+$$
+P/B_t = \frac{\textit{Market value of equity}_t}{\textit{Book value of equity}_t}
+$$
 
 ```{python}
 #| label: step4
 #| echo: true
 #| output: true
 
-# Calculate P/B Ratio for each firm in Year 0
+year_0_data = filtered_data[filtered_data['relative_year'] == 0].copy() 
 
-year_0_data = filtered_data[filtered_data['relative_year'] == 0].copy()  # create a copy of filtered_data DataFrame to contain only data for Year 0
-print("Step 4: Year 0 data:\n", year_0_data)
-print()
-
-year_0_data['bve'] = year_0_data['bve'].replace([0, np.inf, -np.inf], np.nan)  # replace zero and very small BVE values with NaN
-# To verify: display rows where 'bve' is NaN
-nan_bve_rows = year_0_data[year_0_data['bve'].isna()]
-print("Rows where 'bve' has been replaced with NaN:\n", nan_bve_rows)
-num_nan_bve_rows = len(nan_bve_rows)
-print("Number of rows where 'bve' has been replaced with NaN:", num_nan_bve_rows)
-print()
+# replace zero and very small BVE values with NaN
+year_0_data['bve'] = year_0_data['bve'].replace([0, np.inf, -np.inf], np.nan)  
 
 # Use P/B Ratio formula to calculate it for each firm in Year 0
 year_0_data['p/b'] = year_0_data['mve'] / year_0_data['bve']
 
-# Before removing NaN P/B ratios
-num_rows_before = len(year_0_data)
 # Remove rows with NaN P/B ratios
 year_0_data = year_0_data.dropna(subset=['p/b'])
-# After removing NaN P/B ratios
-num_rows_after = len(year_0_data)
-
-# Calculate the number of dropped observations
-num_dropped = num_rows_before - num_rows_after
-print("Number of observations dropped due to NaN P/B ratios:", num_dropped)  # checked: the number of dropped observations is equal to number of dropped BVE observations
-print("Number of rows in Year 0 data after removing NaN P/B ratios:", num_rows_after)
-print("Year 0 data after calculating P/B ratio and dropping NaN values:\n", year_0_data)  # the DataFrame now contains new column p/b ratio
-print()
-print()
 ```
 
-
+## Step 5: Form P/B Groups
+Sort the firms based on their P/B ratios in descending order and divide them into 20 P/B groups, with the highest P/B ratios in group 1 and the lowest in group 20, as presented by Penman (2013). As a result, each P/B group contains approximately 900 firms, ensuring an equal division of the data set. Calculate the median P/B value for each group and merge the P/B group assignment information back into the filtered data, providing information on which P/B group each firm belongs to in each year.
 ```{python}
 #| label: step5
 #| echo: true
 #| output: true
 
-# Form P/B groups
-
 # Sort firms based on their P/B ratios for Year 0 in descending order
 num_groups = 20  # define the number of groups
-year_0_data = year_0_data.sort_values('p/b', ascending=False).reset_index(drop=True)  # sort the year_0_data DataFrame in descending order based on the P/B ratios
-print("Step 5: Year 0 data sorted in descending order based on the P/B ratios:\n", year_0_data)  # check the correct order
-print()
+year_0_data = year_0_data.sort_values(
+    'p/b', ascending=False
+).reset_index(drop=True)
 
-# Assign the groups so that the highest P/B ratios are in group 1 and lowest in group 20
-year_0_data['p/b_group'] = pd.qcut(year_0_data.index, num_groups, labels=range(1, num_groups + 1))
-print("Year 0 data updated with P/B groups:\n", year_0_data)  # checked: p/b ratios grouping aligns with previous output
-
-# Count the number of firms in each P/B group before merging
-pb_group_counts_pre_merge = year_0_data.groupby('p/b_group', observed=True)['isin'].nunique()
-print("Number of firms assigned to each P/B group before merging:\n", pb_group_counts_pre_merge)
-print()
+# Assign the groups so that the highest P/B ratios are in group 1
+year_0_data['p/b_group'] = pd.qcut(
+    year_0_data.index,
+    num_groups,
+    labels=range(1, num_groups + 1)
+)
 
 # Calculate median P/B value for each group
 median_pb_values = year_0_data.groupby('p/b_group', observed=True)['p/b'].median()
-# Display the median P/B values
-print("Median P/B values for each group:\n", median_pb_values)
-print()
 
 # Merge the P/B groups back to the filtered data for Year 0
-filtered_data = filtered_data.merge(year_0_data[['isin', 'p/b_group']], on='isin', how='left')
-# Fill missing P/B groups for years other than Year 0 with the same group as Year 0
-filtered_data['p/b_group'] = filtered_data.groupby('isin')['p/b_group'].ffill()
+filtered_data = filtered_data.merge(
+    year_0_data[['isin', 'p/b_group']],
+    on='isin',
+    how='left'
+)
 
-# Display the combined filtered data after merging P/B groups
-print("Filtered data after merging P/B groups:\n", filtered_data.head(22))  # the DataFrame now contains new column p/b_group
-# Count the number of firms in each P/B group after merging
-pb_group_counts_post_merge = filtered_data.groupby('p/b_group', observed=True)['isin'].nunique()
-print("Number of firms assigned to each P/B group after merging:\n", pb_group_counts_post_merge)  # checked: same number as pre merging
-# Calculate the number of rows in the merged filtered data sample
-num_rows_merged_filtered = len(filtered_data)
-print("Number of rows in the merged filtered data sample:", num_rows_merged_filtered)  # checked: same number as pre merging
-print()
+# Fill missing P/B groups for years other than Year 0 with same group as Year 0
+filtered_data['p/b_group'] = filtered_data.groupby('isin')['p/b_group'].ffill()
 ```
+
+## Step 6: Calculate Residual Income
+This step involves calculating the residual income for each P/B group for Years 0 to 6, followed by deflation by the BVE at the beginning of Year 0. Assume a cost of equity capital of 8%, a reasonable assumption for US firms in the given time range. Based on Penman (2013), the residual income for each company/year should be deflated by the book value of equity at the beginning of Year 0.
+
+To identify whether the financial data from Worldscope contains the numbers as of the beginning or end of the fiscal year, a random sample check was conducted. For example, for ISIN AN8068571086 in its *2020 Annual Report* (2021), the values for total assets, stockholders’ equity, net income, and other financial metrics are measured at the end of each fiscal year [@Schlumberger_2021, p. 20]. Hence, assume that the entire Worldscope panel data provides the BVE, MVE, and net income as values for the end of the respective fiscal year.
+
+In case a company has observations before 1996, the filtered data set does not enable calculation of residual income in Year 0 (1996) due to missing value of BVE in Year -1, resulting into NaN. To avoid that, create a copy of the merged data from Step 1 to preserve all years of observations. Filter it to US companies and identify the year_minus_1 for each firm. Extract BVE for the year before Year 0 (relative_year = -1) for the deflation step and extract the BVE of the previous year for each year for the residual income calculation step.
+
+Calculate the non-deflated residual income for each firm/year using the following formula:
+$$
+\text{Residual income}_t = \text{Net income}_t - r_e \times \text{Book value of equity}_{t-1}
+$$
+
+Assume that the beginning of Year 0 is equivalent to the end of the previous year because the financial data recorded at the end of one year represents the starting values for the following year. According to Penman (2013), residual income is deflated by book value at the beginning of year 0. Hence, for deflating the residual income, use the book value of equity from the year before Year 0 (bve_deflation) for all years (Years 1 to 6). This means that the BVE used for deflation remains constant across all years, normalizing the residual income across different firms and time periods. For example, for Year 0 (1996), use the BVE at the end of 1995 to deflate the residual income.
+
+Calculate the deflated residual income for each firm/year using the following general formula:
+
+$$
+\text{Deflated residual income}_t = \frac{\text{Residual income}_t}{\text{Book value of equity}_{\text{Year 0 start}}}
+$$
 
 ```{python}
 #| label: step6
 #| echo: true
 #| output: true
 
-# Calculate residual income for each P/B group for Years 0 to 6, deflated by the book value of equity at the end of the year before Year 0 (= beginning of year 0)
-
 cost_of_equity = 0.08  # assumption for cost of equity capital
 
-# Create a copy of the merged data from Step 1 to preserve all years of observations
+# Create a copy of the merged data from Step 1 to keep all years of observations
 us_full_data = merged_data[merged_data['country'] == 'UNITED STATES'].copy()
-print("Step 6: Merged data (Step 1) filtered to US only, all years preserved:\n", us_full_data.head(22))
-print()
 
 # Identify Year 0 for each firm, ensuring Year 0 is between 1996 and 2015
-us_full_data['year_0'] = us_full_data.groupby('isin')['year_'].transform(lambda x: x[(x >= 1996) & (x <= 2015)].min())
-us_full_data = us_full_data[us_full_data['year_0'].notna()]  # remove rows where year_0 is NaN
+us_full_data['year_0'] = us_full_data.groupby('isin')['year_'].transform(
+    lambda x: x[(x >= 1996) & (x <= 2015)].min()
+)
+us_full_data = us_full_data[us_full_data['year_0'].notna()] 
 # Calculate the relative year and year_minus_1
 us_full_data['relative_year'] = us_full_data['year_'] - us_full_data['year_0']
 us_full_data['year_minus_1'] = us_full_data['year_0'] - 1
@@ -286,33 +270,32 @@ us_full_data['year_minus_1'] = us_full_data['year_0'] - 1
 us_full_data['year_0'] = us_full_data['year_0'].astype(int)
 us_full_data['relative_year'] = us_full_data['relative_year'].astype(int)
 us_full_data['year_minus_1'] = us_full_data['year_minus_1'].astype(int)
-# Print the data to verify the steps
-print("Data after identifying Year 0, relative year, and Year -1:\n", us_full_data.head(32))
-print()
 
 # Extract BVE for the year before Year 0 (relative_year = -1) for deflation
-bve_deflation = us_full_data[us_full_data['relative_year'] == -1][['isin', 'bve']].rename(columns={'bve': 'bve_deflation'})
-print(bve_deflation)
+bve_deflation = (
+    us_full_data[us_full_data['relative_year'] == -1][['isin', 'bve']]
+    .rename(columns={'bve': 'bve_deflation'})
+)
+
 # Merge the bve_deflation values back to the filtered data
 filtered_data = filtered_data.merge(bve_deflation, on='isin', how='left')
-print("Filtered data with bve_deflation:\n",filtered_data)  # new column on bve_deflation
-print()
 
-# Calculate the BVE of the previous year for each year (for residual income calculation)
+# Calculate the BVE of the previous year for each year
 us_full_data['bve_prev'] = us_full_data.groupby('isin')['bve'].shift(1)
 # Merge bve_prev back to filtered_data
-filtered_data = filtered_data.merge(us_full_data[['isin', 'year_', 'bve_prev']], on=['isin', 'year_'], how='left')
-print("Filtered data with bve_prev:\n",filtered_data)  # new column on bve_prev
-print()
+filtered_data = filtered_data.merge(
+    us_full_data[['isin', 'year_', 'bve_prev']],
+    on=['isin', 'year_'],
+    how='left'
+)
 
 # Function to calculate non-deflated residual income
 def calculate_residual_income(row):
     return row['ninc'] - (cost_of_equity * row['bve_prev'])
 # Apply the function to calculate non-deflated residual income for each row
-filtered_data['residual_income'] = filtered_data.apply(calculate_residual_income, axis=1) 
-# Display the 'residual_income' values
-print("Residual income values:\n", filtered_data)  # new column on residual_income
-print()
+filtered_data['residual_income'] = filtered_data.apply(
+    calculate_residual_income, axis=1
+)
 
 # Function to deflate residual income
 def deflate_residual_income(row):
@@ -321,71 +304,102 @@ def deflate_residual_income(row):
     else:
         return np.nan
 # Apply the function to deflate residual income for each row
-filtered_data['deflated_residual_income'] = filtered_data.apply(deflate_residual_income, axis=1)
-print("Deflated residual income values:\n", filtered_data)  # new column on deflated_residual_income
-print()
+filtered_data['deflated_residual_income'] = filtered_data.apply(
+    deflate_residual_income, axis=1
+)
 ```
 
+## Step 7: Output the Replicated Table
+Calculate the median deflated residual income for each P/B group and relative year. Include the median P/B values in the output table. Ensure consistency with Penman (2013) by formatting the results to three decimal places for residual income and two decimal places for P/B values. The resulting table will be saved into an Excel file in the `data/generated` folder of the repository.
+
+The output table certainly indicates a wide range of P/B ratios among the firms, with some extreme values in high and low P/B groups. There is a noticeable trend where firms with very high or very low P/B ratios have less stable and more extreme residual earnings over time, while middle P/B groups seem to show more stable trends as presented by Penman (2013), suggesting a balanced reflection of expectations between market valuation and expected financial performance.
+
+The variation in trends can be explained by the difference in data sets and possible additional assumptions made by Penman (2013) that are not available. For example, the assignment data set includes all USA firms from the Worldscope database, providing a broader sample than Penman’s original study, which included only NYSE and AMEX firms. Furthermore, the assignment analysis focuses on the years 1996 to 2015, a more recent period with different economic conditions compared to the time frame used in Penman’s (2013) study.
 ```{python}
 #| label: step7
 #| echo: true
 #| output: true
 
-# Output the replicated table
-
-# Group by P/B group and relative year, then calculate the median deflated residual income for each group and year
-median_residual_income = filtered_data.groupby(['p/b_group', 'relative_year'], observed=True)['deflated_residual_income'].median().unstack()
+median_residual_income = filtered_data.groupby(
+    ['p/b_group', 'relative_year'], observed=True
+)['deflated_residual_income'].median().unstack()
 
 # Formatting the results (decimal places)
-median_residual_income = median_residual_income.apply(lambda col: col.map(lambda x: f"{x:.3f}" if pd.notna(x) else "NaN"))
+median_residual_income = median_residual_income.apply(
+    lambda col: col.map(
+        lambda x: f"{x:.3f}" if pd.notna(x) else "NaN"
+    )
+)
 median_pb_values = median_pb_values.apply(lambda x: f"{x:.2f}")
 
 # Add the median P/B values column to the output table
 median_residual_income.insert(0, 'P/B', median_pb_values)
 
 # Display the median residual income table
-print("Median Residual Income by P/B Group and Relative Year:\n", median_residual_income)
-print()
+print(
+    "Median Residual Income by P/B Group and Relative Year:\n", 
+    median_residual_income
+)
 ```
 
+## Step 8: Modification - Exclude Extreme P/B Values
+As indicated in Step 7, the output table certainly includes outliers. To replicate the more stable P/B values observed by Penman (2013), exclude extreme P/B values that are negative or higher than 7. Recalculate the P/B groups based on this filtered data. Merge the updated P/B group information back into the filtered data and repeat the calculation of median deflated residual income for each P/B group and relative year. Format the updated results with the required decimal places and save to an Excel file. The modified output of the replicated table, closely resembling Penman (2013), is presented in Table 2.
+
+The modified table resembles more the one of Penman (2013) by presenting similar trends. In particular, the exclusion of extreme P/B values results in more stable and consistent residual earnings across P/B groups and years. High P/B groups show higher residual earnings initially, which slowly decline over time, and low P/B groups have negative residual earnings that tend to fluctuate but still remain negative.
 ```{python}
 #| label: step8
 #| echo: true
 #| output: true
 
-# Step 8: Modification - exclude negative and very high P/B values
-
 # Filter out extreme P/B values that are negative and higher than 7
-filtered_year_0_data = year_0_data[(year_0_data['p/b'] > 0) & (year_0_data['p/b'] <= 7)]
-print("Filtered Year 0 data after excluding negative and very high P/B values:\n", filtered_year_0_data)
-print()
+filtered_year_0_data = year_0_data[
+    (year_0_data['p/b'] > 0) & (year_0_data['p/b'] <= 7)
+]
 
 # Recalculate the P/B groups based on the filtered data
-filtered_year_0_data = filtered_year_0_data.sort_values('p/b', ascending=False).reset_index(drop=True)
-filtered_year_0_data['p/b_group'] = pd.qcut(filtered_year_0_data.index, num_groups, labels=range(1, num_groups + 1))
-print("Filtered Year 0 data updated with P/B groups:\n", filtered_year_0_data)
-print()
+filtered_year_0_data = filtered_year_0_data.sort_values(
+    'p/b', ascending=False
+).reset_index(drop=True)
+
+filtered_year_0_data['p/b_group'] = pd.qcut(
+    filtered_year_0_data.index, num_groups, labels=range(1, num_groups + 1)
+)
 
 # Merge the P/B groups back to the filtered data for Year 0
 filtered_data = filtered_data.drop(columns=['p/b_group'])
-filtered_data = filtered_data.merge(filtered_year_0_data[['isin', 'p/b_group']], on='isin', how='left')
+filtered_data = filtered_data.merge(
+    filtered_year_0_data[['isin', 'p/b_group']], 
+    on='isin', 
+    how='left'
+)
 filtered_data['p/b_group'] = filtered_data.groupby('isin')['p/b_group'].ffill()
 
 # Calculate median P/B values again
-median_pb_values = filtered_year_0_data.groupby('p/b_group', observed=True)['p/b'].median()
+median_pb_values = filtered_year_0_data.groupby(
+    'p/b_group', 
+    observed=True
+)['p/b'].median()
 
-# Group by P/B group and relative year, then calculate the median deflated residual income for each group and year
-median_residual_income_filtered = filtered_data.groupby(['p/b_group', 'relative_year'], observed=True)['deflated_residual_income'].median().unstack()
+# Calculate the median deflated residual income for each group and year
+median_residual_income_filtered = filtered_data.groupby(
+    ['p/b_group', 'relative_year'], 
+    observed=True
+)['deflated_residual_income'].median().unstack()
 
 # Formatting the results (decimal places)
-median_residual_income_filtered = median_residual_income_filtered.apply(lambda col: col.map(lambda x: f"{x:.3f}" if pd.notna(x) else "NaN"))
+median_residual_income_filtered = median_residual_income_filtered.apply(
+    lambda col: col.map(lambda x: f"{x:.3f}" if pd.notna(x) else "NaN")
+)
 median_pb_values = median_pb_values.apply(lambda x: f"{x:.2f}")
 
 # Add the median P/B values column to the output table
 median_residual_income_filtered.insert(0, 'P/B', median_pb_values)
 
 # Display the median residual income table
-print("Median Residual Income by P/B Group and Relative Year:\n", median_residual_income_filtered)
+print(
+    "Median Residual Income by P/B Group and Relative Year:\n",
+    median_residual_income_filtered
+)
 ```
 
 # Conclusion
