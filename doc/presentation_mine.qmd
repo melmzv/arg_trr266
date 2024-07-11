@@ -1,0 +1,354 @@
+---
+title: "Assignment II: Adopting an Open Science Workflow"
+author: "Melisa Mazaeva"
+institute: "Accounting Reading Group – Summer 2024"
+date: today
+fontsize: "9pt"
+pdf-engine: xelatex # pdflatex creates rastered fonts
+format: 
+  beamer:
+    slide-level: 3
+    number-sections: true
+    toc: false
+header-includes:
+- \usepackage{booktabs} 
+- \usepackage{threeparttable}
+- \usepackage{graphicx}
+- \usepackage{etoolbox}
+- \AtBeginEnvironment{verbatim}{\fontsize{7}{7}\selectfont}  # This sets the font size for verbatim environments
+#- \input{beamer_theme_trr266.sty}
+bibliography: references.bib
+biblio-style: apsr
+---
+
+# Motivation
+
+## Understanding Residual Income and Importance of P/B Ratios
+
+- Residual income is a key metric in evaluating the performance of public firms.
+- It helps in assessing the value creation for shareholders beyond the cost of capital.
+- Price-to-Book (P/B) ratios are widely used in financial analysis to compare a firm’s market value to its book value.
+- Grouping firms by P/B ratios allows for a detailed analysis of financial performance across different valuation levels.
+
+## Project Objective
+
+- The primary objective is to demonstrate a reproducible and collaborative research workflow by calculating and analyzing residual incomes and Price-to-Book (P/B) ratios. 
+- The study aims to explore the residual income of U.S. public firms grouped by P/B ratios using external Worldscope datasets for the time range 1996 to 2015.
+- The project replicates the study of @Penman_2013 that links current P/B ratios to future residual income.
+- The analysis provides insights into the median residual income over time across different P/B groups, similar to the insights of Penman (2013).
+
+## Project Relevance
+
+- Understanding the distribution and trends of residual income can inform investment decisions and corporate strategies.
+- It supports the broader objective of promoting transparency and reproducibility in empirical accounting research.
+
+# Assumptions and Notes
+The aim of Assignment I is to replicate a specific empirical table that involves calculating the residual income of US firms over a defined period and examining the relationship between residual income and the Price-to-Book (P/B) ratio. The replication process involves data preparation, cleaning, and normalization, followed by the application of statistical methods to compute and interpret financial metrics. 
+
+For Assignment I, I used the Python programming language to carry out the empirical analysis. Visual Studio Code was used as the Integrated Development Environment (IDE) for writing, debugging, and optimizing the Python code.
+
+## Assumptions
+- **Constant Cost of Equity:** Assumed at 8% ($r_e = 8\%$), a reasonable average estimate for the period 1996-2015 in the US (@Goedhart_Koller_Williams_2002; @Damodaran_2024).
+- **Data Source:** Worldscope panel data includes Book Value of Equity (BVE), Market Value of Equity (MVE), and net income at fiscal year-end .
+- **Year 0 Data:** Year-end data from the previous year used as the starting values for the following year.
+- **Deflation Basis:** Residual income deflated by BVE at the end of the year before Year 0 for comparability.
+- **P/B Values Range:** Restricted to 0-7 to exclude outliers, focusing on firms with stable valuations.
+
+# Data - Replication Steps 
+
+Step 1: Data Loading and Merging
+
+Step 2: Filter Data for US Firms and Relevant Years
+
+Step 3: Identify Year 0 to Year 6 for Each Firm
+
+Step 4: Calculate P/B Ratio for Each Firm in Year 0
+
++ Use the following formula to calculate the P/B ratio:
+$$
+P/B_t = \frac{\textit{Market value of equity}_t}{\textit{Book value of equity}_t}
+$$
+
+Step 5: Form P/B Groups
+
+---
+
+Step 6: Calculate Residual Income
+
++ The Worldscope panel data provides BVE, MVE, and net income values at the end of each fiscal year, confirmed by the *2020 Annual Report* (2021) of ISIN AN8068571086 [@Schlumberger_2021, p. 20].
++ Calculate the non-deflated residual income for each firm/year using the following formula:
+$$
+\text{Residual income}_t = \text{Net income}_t - r_e \times \text{Book value of equity}_{t-1}
+$$
+
++ Calculate the deflated residual income for each firm/year using the following general formula:
+$$
+\text{Deflated residual income}_t = \frac{\text{Residual income}_t}{\text{Book value of equity}_{\text{Year 0 start}}}
+$$
+
+---
+
+Step 7: Output the Replicated Table
+
+```{python}
+#| label: step1-7
+#| echo: false
+#| output: true
+
+import pandas as pd
+import numpy as np
+import os
+import yaml
+
+# Function to get the path of the current file
+def get_current_path():
+    try:
+        return os.path.dirname(os.path.abspath(__file__))
+    except NameError:
+        return os.getcwd()
+
+# Define the relative path to the configuration file
+current_path = get_current_path()
+project_root = os.path.abspath(os.path.join(current_path, '..'))
+config_path = os.path.join(project_root, 'config', 'config.yaml')
+
+# Load the configuration from YAML file
+with open(config_path, 'r') as file:
+    config = yaml.safe_load(file)
+
+# Extract paths from the config file
+STATIC_DATA_PATH = os.path.join(project_root, 'data', 'external', 
+                                'wscp_static.txt')
+PANEL_DATA_PATH = os.path.join(project_root, 'data', 'external', 
+                               'wscp_panel.xlsx')
+
+# Load the data from Worldscope files into pandas DataFrames
+static_data = pd.read_csv(STATIC_DATA_PATH, delimiter='\t')
+panel_data = pd.read_excel(PANEL_DATA_PATH)
+
+# Normalize column names to avoid issues with column naming conventions
+static_data.columns = (
+    static_data.columns.str.strip()
+    .str.lower()
+    .str.replace(' ', '_')
+)
+
+panel_data.columns = (
+    panel_data.columns.str.strip()
+    .str.lower()
+    .str.replace(' ', '_')
+)
+
+# Merge data on 'isin' to include country information in panel_data
+merged_data = panel_data.merge(
+    static_data[['isin', 'country']], 
+    on='isin', 
+    how='left'
+)
+
+us_firms = merged_data[merged_data['country'] == 'UNITED STATES']  
+filtered_data = us_firms[
+    (us_firms['year_'] >= 1996) & 
+    (us_firms['year_'] <= 2015)
+].copy()
+
+filtered_data['year_0'] = filtered_data.groupby('isin')['year_'].transform('min')  
+filtered_data['relative_year'] = filtered_data['year_'] - filtered_data['year_0']  
+filtered_data = filtered_data[filtered_data['relative_year'] <= 6] 
+
+year_0_data = filtered_data[filtered_data['relative_year'] == 0].copy() 
+
+# replace zero and very small BVE values with NaN
+year_0_data['bve'] = year_0_data['bve'].replace([0, np.inf, -np.inf], np.nan)  
+
+# Use P/B Ratio formula to calculate it for each firm in Year 0
+year_0_data['p/b'] = year_0_data['mve'] / year_0_data['bve']
+
+# Remove rows with NaN P/B ratios
+year_0_data = year_0_data.dropna(subset=['p/b'])
+
+# Sort firms based on their P/B ratios for Year 0 in descending order
+num_groups = 20  # define the number of groups
+year_0_data = year_0_data.sort_values(
+    'p/b', ascending=False
+).reset_index(drop=True)
+
+# Assign the groups so that the highest P/B ratios are in group 1
+year_0_data['p/b_group'] = pd.qcut(
+    year_0_data.index,
+    num_groups,
+    labels=range(1, num_groups + 1)
+)
+
+# Calculate median P/B value for each group
+median_pb_values = year_0_data.groupby('p/b_group', observed=True)['p/b'].median()
+
+# Merge the P/B groups back to the filtered data for Year 0
+filtered_data = filtered_data.merge(
+    year_0_data[['isin', 'p/b_group']],
+    on='isin',
+    how='left'
+)
+
+# Fill missing P/B groups for years other than Year 0 with same group as Year 0
+filtered_data['p/b_group'] = filtered_data.groupby('isin')['p/b_group'].ffill()
+
+cost_of_equity = 0.08  # assumption for cost of equity capital
+
+# Create a copy of the merged data from Step 1 to keep all years of observations
+us_full_data = merged_data[merged_data['country'] == 'UNITED STATES'].copy()
+
+# Identify Year 0 for each firm, ensuring Year 0 is between 1996 and 2015
+us_full_data['year_0'] = us_full_data.groupby('isin')['year_'].transform(
+    lambda x: x[(x >= 1996) & (x <= 2015)].min()
+)
+us_full_data = us_full_data[us_full_data['year_0'].notna()] 
+# Calculate the relative year and year_minus_1
+us_full_data['relative_year'] = us_full_data['year_'] - us_full_data['year_0']
+us_full_data['year_minus_1'] = us_full_data['year_0'] - 1
+
+# Convert years to integer
+us_full_data['year_0'] = us_full_data['year_0'].astype(int)
+us_full_data['relative_year'] = us_full_data['relative_year'].astype(int)
+us_full_data['year_minus_1'] = us_full_data['year_minus_1'].astype(int)
+
+# Extract BVE for the year before Year 0 (relative_year = -1) for deflation
+bve_deflation = (
+    us_full_data[us_full_data['relative_year'] == -1][['isin', 'bve']]
+    .rename(columns={'bve': 'bve_deflation'})
+)
+
+# Merge the bve_deflation values back to the filtered data
+filtered_data = filtered_data.merge(bve_deflation, on='isin', how='left')
+
+# Calculate the BVE of the previous year for each year
+us_full_data['bve_prev'] = us_full_data.groupby('isin')['bve'].shift(1)
+# Merge bve_prev back to filtered_data
+filtered_data = filtered_data.merge(
+    us_full_data[['isin', 'year_', 'bve_prev']],
+    on=['isin', 'year_'],
+    how='left'
+)
+
+# Function to calculate non-deflated residual income
+def calculate_residual_income(row):
+    return row['ninc'] - (cost_of_equity * row['bve_prev'])
+# Apply the function to calculate non-deflated residual income for each row
+filtered_data['residual_income'] = filtered_data.apply(
+    calculate_residual_income, axis=1
+)
+
+# Function to deflate residual income
+def deflate_residual_income(row):
+    if pd.notna(row['bve_deflation']) and row['bve_deflation'] != 0:
+        return row['residual_income'] / row['bve_deflation']
+    else:
+        return np.nan
+# Apply the function to deflate residual income for each row
+filtered_data['deflated_residual_income'] = filtered_data.apply(
+    deflate_residual_income, axis=1
+)
+
+median_residual_income = filtered_data.groupby(
+    ['p/b_group', 'relative_year'], observed=True
+)['deflated_residual_income'].median().unstack()
+
+# Formatting the results (decimal places)
+median_residual_income = median_residual_income.apply(
+    lambda col: col.map(
+        lambda x: f"{x:.3f}" if pd.notna(x) else "NaN"
+    )
+)
+median_pb_values = median_pb_values.apply(lambda x: f"{x:.2f}")
+
+# Add the median P/B values column to the output table
+median_residual_income.insert(0, 'P/B', median_pb_values)
+
+# Display the median residual income table
+print(
+    "Median Residual Income by P/B Group and Relative Year:\n", 
+    median_residual_income
+) 
+```
+
+
+---
+
+Step 8: Modification - Exclude Extreme P/B Values
+
+```{python}
+#| label: step8
+#| echo: false
+#| output: true
+
+# Filter out extreme P/B values that are negative and higher than 7
+filtered_year_0_data = year_0_data[
+    (year_0_data['p/b'] > 0) & (year_0_data['p/b'] <= 7)
+]
+
+# Recalculate the P/B groups based on the filtered data
+filtered_year_0_data = filtered_year_0_data.sort_values(
+    'p/b', ascending=False
+).reset_index(drop=True)
+
+filtered_year_0_data['p/b_group'] = pd.qcut(
+    filtered_year_0_data.index, num_groups, labels=range(1, num_groups + 1)
+)
+
+# Merge the P/B groups back to the filtered data for Year 0
+filtered_data = filtered_data.drop(columns=['p/b_group'])
+filtered_data = filtered_data.merge(
+    filtered_year_0_data[['isin', 'p/b_group']], 
+    on='isin', 
+    how='left'
+)
+filtered_data['p/b_group'] = filtered_data.groupby('isin')['p/b_group'].ffill()
+
+# Calculate median P/B values again
+median_pb_values = filtered_year_0_data.groupby(
+    'p/b_group', 
+    observed=True
+)['p/b'].median()
+
+# Calculate the median deflated residual income for each group and year
+median_residual_income_filtered = filtered_data.groupby(
+    ['p/b_group', 'relative_year'], 
+    observed=True
+)['deflated_residual_income'].median().unstack()
+
+# Formatting the results (decimal places)
+median_residual_income_filtered = median_residual_income_filtered.apply(
+    lambda col: col.map(lambda x: f"{x:.3f}" if pd.notna(x) else "NaN")
+)
+median_pb_values = median_pb_values.apply(lambda x: f"{x:.2f}")
+
+# Add the median P/B values column to the output table
+median_residual_income_filtered.insert(0, 'P/B', median_pb_values)
+
+# Display the median residual income table
+print(
+    "Median Residual Income by P/B Group and Relative Year:\n",
+    median_residual_income_filtered
+)
+```
+
+# Conclusion
+
+## Summary of Findings
+
+- Replicated an empirical table from Penman (2013), showcasing similar trends.
+- The project structure demonstrated the effectiveness of an open science and collaborative workflow.
+- This repository can be cloned or forked for further projects on residual income analysis.
+
+## Key Insights
+
+- From analysis of residual incomes and Price-to-Book (P/B) ratios of U.S. public firms: 
+    - High P/B groups initially exhibit higher residual earnings, which decline over time. 
+    - Low P/B groups consistently show negative residual earnings.
+- Residual income analysis by P/B ratios offers valuable insights that can promote better investment and corporate strategy decisions.
+
+# References {-}
+\setlength{\parindent}{-0.2in}
+\setlength{\leftskip}{0.2in}
+\setlength{\parskip}{8pt}
+\noindent

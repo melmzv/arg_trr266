@@ -6,7 +6,7 @@
       "source": [
         "---\n",
         "title: |\n",
-        "  | Exporing Discretionary Accruals: \n",
+        "  | Exporting Discretionary Accruals: \n",
         "  | A Stub Project^[I acknowledge financial support from Deutsche Forschungsgemeinschaft-Project-ID 403041268 - TRR 266.] \\vspace{1cm}\n",
         "author: |\n",
         "  | Joachim Gassen \n",
@@ -45,7 +45,7 @@
         "  - \\usepackage[margin=1in]{geometry}\n",
         "---"
       ],
-      "id": "79dbe574"
+      "id": "cb4033bf"
     },
     {
       "cell_type": "code",
@@ -68,7 +68,7 @@
         "        table = table.replace(var_name, var_label)\n",
         "    return table"
       ],
-      "id": "01559ea6",
+      "id": "cda1c1cf",
       "execution_count": null,
       "outputs": []
     },
@@ -91,7 +91,7 @@
         "\n",
         "Table \\ref{tab:tab-descriptives-sample} presents our data that is based on a simple WRDS pull of Compustat data with financial firms (SIC 6XXX) excluded. We require data to calculate all variables and this drastically reduces the sample size. Modified Jones discretionary accruals are calculated loosely based on @HN_2007 and Dechow and Dichev discretionary accruals are calculated based on (big surprise) @DD_2002. As you will see from @fig-boxplot_smp, discretionary accruals are very noisy constructs, even after limiting the sample to observations with complete data and winsorizing all data to the top and bottom percentile for each year. @fig-scatter_dd_lnta shows a very prominent heteroscedasticity of discretionary accruals with regards to size. While researchers have tried to address this problem, the distributional properties of these constructs significantly complicate the interpretation of discretionary accrual-related findings. Especially in high powered settings, the measurement error, being highly correlated with size, will tend to load on variables that are unrelated to the underlying economic construct but correlated with size. Table \\ref{tab:corr} shows some correlations and Table \\ref{tab:reg} shows some completely pointless regressions.\n"
       ],
-      "id": "e80f04f2"
+      "id": "2a10ebcc"
     },
     {
       "cell_type": "code",
@@ -154,7 +154,7 @@
         "    '\\\\end{table}',\n",
         "]))"
       ],
-      "id": "1d1a938e",
+      "id": "15bd959e",
       "execution_count": null,
       "outputs": []
     },
@@ -182,7 +182,7 @@
         "    \"\\end{table}\"\n",
         "]))"
       ],
-      "id": "a487aa25",
+      "id": "7f55b31e",
       "execution_count": null,
       "outputs": []
     },
@@ -201,7 +201,7 @@
         "    \"\\end{table}\"\n",
         "]))"
       ],
-      "id": "6001aea7",
+      "id": "5c787ea5",
       "execution_count": null,
       "outputs": []
     },
@@ -224,7 +224,7 @@
         "\\setlength{\\parskip}{8pt}\n",
         "\\noindent"
       ],
-      "id": "df4491d0"
+      "id": "9f2f4036"
     }
   ],
   "metadata": {

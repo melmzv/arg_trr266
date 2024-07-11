@@ -314,7 +314,7 @@ Calculate the median deflated residual income for each P/B group and relative ye
 
 The output table certainly indicates a wide range of P/B ratios among the firms, with some extreme values in high and low P/B groups. There is a noticeable trend where firms with very high or very low P/B ratios have less stable and more extreme residual earnings over time, while middle P/B groups seem to show more stable trends as presented by Penman (2013), suggesting a balanced reflection of expectations between market valuation and expected financial performance.
 
-The variation in trends can be explained by the difference in data sets and possible additional assumptions made by Penman (2013) that are not available. For example, the assignment data set includes all USA firms from the Worldscope database, providing a broader sample than Penman’s original study, which included only NYSE and AMEX firms. Furthermore, the assignment analysis focuses on the years 1996 to 2015, a more recent period with different economic conditions compared to the time frame used in Penman’s (2013) study.
+The variation in trends can be explained by the difference in data sets and possible additional assumptions made by Penman (2013) that are not available. For example, the assignment data set includes all USA firms from the Worldscope database, providing a broader sample than Penman’s original study, which included only NYSE and AMEX firms. Furthermore, the assignment analysis focuses on the years 1996 to 2015, a more recent period with different economic conditions compared to the time frame used in Penman’s (2013) study. 
 ```{python}
 #| label: step7
 #| echo: true
