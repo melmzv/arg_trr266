@@ -310,15 +310,16 @@ filtered_data['deflated_residual_income'] = filtered_data.apply(
 ```
 
 ## Step 7: Output the Replicated Table
-Calculate the median deflated residual income for each P/B group and relative year. Include the median P/B values in the output table. Ensure consistency with Penman (2013) by formatting the results to three decimal places for residual income and two decimal places for P/B values. The resulting table will be saved into an Excel file in the `data/generated` folder of the repository.
+Calculate the median deflated residual income for each P/B group and relative year. Include the median P/B values in the output table. Ensure consistency with Penman (2013) by formatting the results to three decimal places for residual income and two decimal places for P/B values. The resulting table of the Python code will be saved into an Excel file in the `data/generated` folder of the repository.
 
-The output table certainly indicates a wide range of P/B ratios among the firms, with some extreme values in high and low P/B groups. There is a noticeable trend where firms with very high or very low P/B ratios have less stable and more extreme residual earnings over time, while middle P/B groups seem to show more stable trends as presented by Penman (2013), suggesting a balanced reflection of expectations between market valuation and expected financial performance.
+The output @tbl-median-residual-income certainly indicates a wide range of P/B ratios among the firms, with some extreme values in high and low P/B groups. There is a noticeable trend where firms with very high or very low P/B ratios have less stable and more extreme residual earnings over time, while middle P/B groups seem to show more stable trends as presented by Penman (2013), suggesting a balanced reflection of expectations between market valuation and expected financial performance.
 
 The variation in trends can be explained by the difference in data sets and possible additional assumptions made by Penman (2013) that are not available. For example, the assignment data set includes all USA firms from the Worldscope database, providing a broader sample than Penman’s original study, which included only NYSE and AMEX firms. Furthermore, the assignment analysis focuses on the years 1996 to 2015, a more recent period with different economic conditions compared to the time frame used in Penman’s (2013) study. 
 ```{python}
-#| label: step7
+#| label: tbl-median-residual-income
+#| tbl-cap: "Median Residual Income by P/B Group and Relative Year"
 #| echo: true
-#| output: true
+#| output: asis
 
 median_residual_income = filtered_data.groupby(
     ['p/b_group', 'relative_year'], observed=True
@@ -335,21 +336,22 @@ median_pb_values = median_pb_values.apply(lambda x: f"{x:.2f}")
 # Add the median P/B values column to the output table
 median_residual_income.insert(0, 'P/B', median_pb_values)
 
-# Display the median residual income table
-print(
-    "Median Residual Income by P/B Group and Relative Year:\n", 
-    median_residual_income
-)
+# Display the median residual income table 
+html_table = median_residual_income.to_html(classes='dataframe', border=0)
+html_content = f'<div style="max-width: 80%; margin: auto;">{html_table}</div>'
+from IPython.display import display, HTML
+display(HTML(html_content))
 ```
 
 ## Step 8: Modification - Exclude Extreme P/B Values
-As indicated in Step 7, the output table certainly includes outliers. To replicate the more stable P/B values observed by Penman (2013), exclude extreme P/B values that are negative or higher than 7. Recalculate the P/B groups based on this filtered data. Merge the updated P/B group information back into the filtered data and repeat the calculation of median deflated residual income for each P/B group and relative year. Format the updated results with the required decimal places and save to an Excel file. The modified output of the replicated table, closely resembling Penman (2013), is presented in Table 2.
+As indicated in Step 7, the output @tbl-median-residual-income certainly includes outliers. To replicate the more stable P/B values observed by Penman (2013), exclude extreme P/B values that are negative or higher than 7. Recalculate the P/B groups based on this filtered data. Merge the updated P/B group information back into the filtered data and repeat the calculation of median deflated residual income for each P/B group and relative year. Format the updated results with the required decimal places and save to an Excel file. The modified output of the replicated @tbl-median-residual-income, closely resembling Penman (2013), is presented in @tbl-median-residual-income-filtered.
 
-The modified table resembles more the one of Penman (2013) by presenting similar trends. In particular, the exclusion of extreme P/B values results in more stable and consistent residual earnings across P/B groups and years. High P/B groups show higher residual earnings initially, which slowly decline over time, and low P/B groups have negative residual earnings that tend to fluctuate but still remain negative.
+The modified @tbl-median-residual-income-filtered resembles more the one of Penman (2013) by presenting similar trends. In particular, the exclusion of extreme P/B values results in more stable and consistent residual earnings across P/B groups and years. High P/B groups show higher residual earnings initially, which slowly decline over time, and low P/B groups have negative residual earnings that tend to fluctuate but still remain negative.
 ```{python}
-#| label: step8
+#| label: tbl-median-residual-income-filtered
+#| tbl-cap: "Median Residual Income by P/B Group and Relative Year after Excluding Extreme P/B Values"
 #| echo: true
-#| output: true
+#| output: asis
 
 # Filter out extreme P/B values that are negative and higher than 7
 filtered_year_0_data = year_0_data[
@@ -396,10 +398,10 @@ median_pb_values = median_pb_values.apply(lambda x: f"{x:.2f}")
 median_residual_income_filtered.insert(0, 'P/B', median_pb_values)
 
 # Display the median residual income table
-print(
-    "Median Residual Income by P/B Group and Relative Year:\n",
-    median_residual_income_filtered
-)
+html_table_filtered = median_residual_income_filtered.to_html(classes='dataframe', border=0)
+html_content_filtered = f'<div style="max-width: 80%; margin: auto;">{html_table_filtered}</div>'
+from IPython.display import display, HTML
+display(HTML(html_content_filtered))
 ```
 
 # Conclusion
