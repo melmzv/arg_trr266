@@ -99,13 +99,17 @@ def get_current_path():
         return os.getcwd()
 
 # Define the relative path to the configuration file
-config_path = os.path.join(get_current_path(), '..', 'config', 'config.yaml')
+current_path = get_current_path()
+project_root = os.path.abspath(os.path.join(current_path, '..'))
+config_path = os.path.join(project_root, 'config', 'config.yaml')
+
+# Load the configuration from YAML file
 with open(config_path, 'r') as file:
     config = yaml.safe_load(file)
 
 # Extract paths from the config file
-STATIC_DATA_PATH = os.path.join(get_current_path(), '..', config['data_paths']['static_data'])
-PANEL_DATA_PATH = os.path.join(get_current_path(), '..', config['data_paths']['panel_data'])
+STATIC_DATA_PATH = os.path.join(project_root, 'data', 'external', 'wscp_static.txt')
+PANEL_DATA_PATH = os.path.join(project_root, 'data', 'external', 'wscp_panel.xlsx')
 
 # Check if files exist
 if not os.path.exists(STATIC_DATA_PATH):

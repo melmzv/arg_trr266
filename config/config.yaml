@@ -1,3 +1,3 @@
 data_paths:
-  static_data: '../data/external/wscp_static.txt'
-  panel_data: '../data/external/wscp_panel.xlsx'
+  static_data: 'data/external/wscp_static.txt'
+  panel_data: 'data/external/wscp_panel.xlsx'
