@@ -70,8 +70,13 @@ ul.task-list li input[type="checkbox"] {
 <li><p><code>config</code>: This directory holds configuration files that are being called by the program scripts in the <code>code</code> directory. We try to keep the configurations separate from the code to make it easier to adjust the workflow to your needs. In this project, we utilize a <code>config.yaml</code> file to manage configuration settings and paths in the <code>doc</code> directory, for example. This approach ensures that paths are relative to the repository, making the project portable and easy to use on different systems.</p></li>
 <li><p><code>code</code>: This directory holds Python program script that is being called to load data from Worldscope, prepare the data, run the analysis and create the output files (excel output tables; a paper and a presentation, both PDF files to be generated in <code>doc</code> directory).</p></li>
 <li><p><code>data</code>: A directory where data is stored. You will see that it again contains sub-directories and a README file that explains their purpose. You will also see that in the <code>external</code> sub-directory there are two data files. Again, the README file explains their content.</p></li>
-<li><p><code>doc</code>: Here you will find two Quarto files containing text and program instructions that will become our paper and presentation, by rendering them through the R markdown process and LaTeX. &gt; [!TIP] &gt; Logo File Update: Convert <code>trr266_logo.eps</code> to ‘trr266_logo.pdf’ for compatibility with XeLaTeX. Update ‘beamer_theme_trr266.sty’ to reference the new PDF logo file. When running the presentation script, ensure <code>trr266_logo.pdf</code> is in the doc directory for the beamer theme to work correctly.</p></li>
-<li><p><code>info</code>: This is a folder that can store additional documentation. In our case you will find a RMarkdown file that introduces our TRR 266-themed ggplot theme.</p></li>
+<li><p><code>doc</code>: Here you will find two Quarto files containing text and program instructions that will become our paper and presentation, by rendering them through the R markdown process and LaTeX.</p></li>
+</ul>
+<blockquote class="blockquote">
+<p>[!TIP] Logo File Update: Convert <code>trr266_logo.eps</code> to ‘trr266_logo.pdf’ for compatibility with XeLaTeX. Update ‘beamer_theme_trr266.sty’ to reference the new PDF logo file. When running the presentation script, ensure <code>trr266_logo.pdf</code> is in the doc directory for the beamer theme to work correctly.</p>
+</blockquote>
+<ul>
+<li><code>info</code>: This is a folder that can store additional documentation. In our case you will find a RMarkdown file that introduces our TRR 266-themed ggplot theme.</li>
 </ul>
 <p>You also see an <code>output</code> directory but it is empty. Why? Because you will create the output locally on your computer, if you want. Specifically, this is the directory where generated output excel files (e.g., <code>median_residual_income.xlsx</code> and <code>median_residual_income_filtered.xlsx</code>) will be saved locally.</p>
 </section>
