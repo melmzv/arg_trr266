@@ -60,9 +60,8 @@ Assuming that you have Worldscope data access, Vs Code and make installed, this 
 2. You can now clone the repository to your local machine. Open the repository in Vs Code and open a new terminal.
 3. It is advisable to create a virtual environment for the project. You can do this by running `python -m venv venv` in the terminal. This will create a virtual environment in the `venv` directory. You can activate the virtual environment by running `source venv/bin/activate` on MacOS or Linux or `.\venv\Scripts\activate` on Windows. You can deactivate the virtual environment by running `deactivate`.
 4. With an active virtual environment, you can install the required packages by running `pip install -r requirements.txt` in the terminal. This will install the required packages for the project.
-5. Copy the file _secrets.env to secrets.env in the project main directory. Edit it by adding your WRDS credentials. 
-6. Run 'make all' either via the console. 
-7. Eventually, you will be greeted with the two files in the output directory: "paper.pdf" and "presentation.pdf". Congratulations! You have successfully used an open science resource and reproduced our "analysis". Now modify it and make it your own project!
+5. Run 'make all' either via the console. 
+6. Eventually, you will be greeted with the two files in the output directory: "paper.pdf" and "presentation.pdf". Congratulations! You have successfully used an open science resource and reproduced our "analysis". Now modify it and make it your own project!
 
 ### OK. That was fun. Bot how should I use the repo now?
 
