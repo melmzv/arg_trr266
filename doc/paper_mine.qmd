@@ -398,8 +398,16 @@ median_pb_values = median_pb_values.apply(lambda x: f"{x:.2f}")
 median_residual_income_filtered.insert(0, 'P/B', median_pb_values)
 
 # Display the median residual income table
-html_table_filtered = median_residual_income_filtered.to_html(classes='dataframe', border=0)
-html_content_filtered = f'<div style="max-width: 80%; margin: auto;">{html_table_filtered}</div>'
+html_table_filtered = median_residual_income_filtered.to_html(
+    classes='dataframe', 
+    border=0
+)
+
+html_content_filtered = (
+    f'<div style="max-width: 80%; margin: auto;">'
+    f'{html_table_filtered}'
+    f'</div>'
+)
 from IPython.display import display, HTML
 display(HTML(html_content_filtered))
 ```
