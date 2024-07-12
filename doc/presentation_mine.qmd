@@ -338,7 +338,7 @@ print(
 
 - Replicated an empirical table from Penman (2013), showcasing similar trends.
 - The project structure demonstrated the effectiveness of an open science and collaborative workflow.
-- This repository can be cloned or forked for further projects on residual income analysis.
+- This repository can be cloned or forked for further projects on median residual income analysis.
 
 ## Key Insights
 
