@@ -81,19 +81,18 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li><code>info</code>: This is a folder that can store additional documentation. In our case you will find a RMarkdown file that introduces our TRR 266-themed ggplot theme.</li>
 </ul>
-<p>You also see an <code>output</code> directory but it is empty. Why? Because you will create the output locally on your computer, if you want. Specifically, this is the directory where generated output excel files (e.g., <code>median_residual_income.xlsx</code> and <code>median_residual_income_filtered.xlsx</code>) will be saved locally.</p>
+<p>You also see an <code>output</code> directory but it is empty. Why? Because you will create the output locally on your computer, if you want. Specifically, this is the directory where generated output files (e.g., <code>paper_mine.pdf</code> and <code>presentation_mine.pdf</code>) will be saved locally.</p>
 </section>
 <section id="how-to-create-the-output" class="level3">
 <h3 class="anchored" data-anchor-id="how-to-create-the-output">How to create the output?</h3>
-<p>Assuming that you have Worldscope data access, Vs Code and make installed, this should be relatively straightforward.</p>
+<p>Assuming that you have Worldscope data access, Python, VS Code, Quarto and make installed, this should be relatively straightforward. Refer to download and setup instructions <a href="#where-do-i-start">here</a>.</p>
 <ol type="1">
 <li>Click on the <code>Use this template</code> button on the top right of the repository and choose <code>Create a new repository</code>. Give the repository a name, a description and choose whether it should be public or private. Click on <code>Create repository</code>.</li>
 <li>You can now clone the repository to your local machine. Open the repository in Vs Code and open a new terminal.</li>
 <li>It is advisable to create a virtual environment for the project. You can do this by running <code>python -m venv venv</code> in the terminal. This will create a virtual environment in the <code>venv</code> directory. You can activate the virtual environment by running <code>source venv/bin/activate</code> on MacOS or Linux or <code>.\venv\Scripts\activate</code> on Windows. You can deactivate the virtual environment by running <code>deactivate</code>.</li>
 <li>With an active virtual environment, you can install the required packages by running <code>pip install -r requirements.txt</code> in the terminal. This will install the required packages for the project.</li>
-<li>Copy the file _secrets.env to secrets.env in the project main directory. Edit it by adding your WRDS credentials.</li>
-<li>Run ‘make all’ either via the console.</li>
-<li>Eventually, you will be greeted with the two files in the output directory: “paper.pdf” and “presentation.pdf”. Congratulations! You have successfully used an open science resource and reproduced our “analysis”. Now modify it and make it your own project!</li>
+<li>Run ‘make all’ either via the console. This project uses the Makefile for easy and straightforward code execution; it renders the Quarto documents and moves the resulting PDFs to the <code>output</code> directory.</li>
+<li>Eventually, you will be greeted with the two files in the output directory: “paper.pdf” and “presentation.pdf”. Congratulations! 🥳 You have successfully used an open science resource and reproduced our “analysis”. This repository can be cloned or forked for further projects on median residual income analysis. Now modify it and make it your own project!</li>
 </ol>
 </section>
 <section id="ok.-that-was-fun.-bot-how-should-i-use-the-repo-now" class="level3">
