@@ -1,6 +1,6 @@
 ---
 title: "Assignment II: Adopting an Open Science Workflow"
-author: "Melisa Mazaeva"
+author: "Mel Mzv"
 institute: "Accounting Reading Group – Summer 2024"
 date: today
 fontsize: "9pt"

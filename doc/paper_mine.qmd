@@ -3,10 +3,10 @@ title: |
   | Assignment II: 
   | Adopting an Open Science Workflow \vspace{1cm}
 author: |
-  | Melisa Mazaeva 
+  | Mel Mzv 
   | Accounting Reading Group – Summer 2024
   | Humboldt-Universität zu Berlin 
-  | melisa.mazaeva@student.hu-berlin.de
+  | m@student.hu-berlin.de
 date: today
 date-format: MMM D, YYYY [\vspace{1cm}]
 abstract: |
